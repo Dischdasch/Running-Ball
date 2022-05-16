@@ -2,6 +2,7 @@ class Platform {
   PVector position;
   PVector scale;
   PVector rotation;
+  float size = 100;
   
   Platform(float x, float y, float z, float w, float h, float d, float xRotation, float yRotation, float zRotation) {
     position = new PVector(x, y, z);
@@ -17,7 +18,8 @@ class Platform {
     rotateX(rotation.x);
     rotateY(rotation.y);
     rotateZ(rotation.z);
-    box(100);
+    // shader(material);
+    box(size);
     popMatrix();
   }
 }
