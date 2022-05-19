@@ -12,6 +12,9 @@ class Player {
   float maxSpeed = 25;
   float jumpForce = 20f;
   
+  //Plataforma y si esta en el suelo
+  int nPlat;
+  boolean isFloor = false;
   Player(float x, float y, float z) {
     this.position = new PVector(x, y, z);
     this.velocity = new PVector(0,0,0);
@@ -36,9 +39,9 @@ class Player {
     collisionDetection();
   }
   
-  void updateCollision(ArrayList<PVector> pos){
+  void updateCollision(ArrayList<Platform> pos){
     int num = 0;
-    for(PVector b : pos){
+    for(Platform b : pos){
       num++;
       collisionBoxDetection(b,num);  
     }
@@ -56,36 +59,71 @@ class Player {
   }
   
   //colision box 2
-  void collisionBoxDetection(PVector box,int num){
-    if(position.y > box.y - radius - 100 && position.y < box.y - radius + 100 && position.x > box.x-500 && position.x < box.x+500 && position.z > box.z-500 && position.z < box.z+500){
-      if(position.y > box.y - radius + 50 && position.y < box.y - radius + 100){
-        position.y = box.y + radius + 100;
+  void collisionBoxDetection(Platform plat,int num){
+    PVector box = plat.getXYZ();
+    PVector size = plat.getSize();
+    //Colision directa
+    if(position.y > box.y - radius*2 - size.y && position.y < box.y - radius*2 + size.y && position.x > box.x-size.x- radius*2 && position.x < box.x+size.x- radius*2 && position.z > box.z-size.z && position.z < box.z+size.z){
+      //Deteccion si viene de abajo (usar plataforma de rebote)
+      if(position.y > box.y - radius*2 + size.y/2.5 && position.y < box.y - radius*2 + size.y){
+        position.y = box.y + radius*2 + size.y;
         //rebote?
         player.addForce(new PVector(0,jumpForce,0));
       } else{
-        position.y = box.y - radius - 100;
+        position.y = box.y - radius*2 - size.y;
+      }
+      switch(plat.getID()){
+        case 1:
+          fill(0);
+          pushMatrix();
+          translate(box.x,box.y-radius*2-size.y,position.z-(position.z-box.z)/4);
+          sphere(120);
+          position.z -= (position.z-box.z*(box.z/position.z))/30f;
+          fill(255);
+          popMatrix();
+        case 3:
+          velocity.x += velocity.x*0.04f;
+          velocity.z += velocity.z*0.04f;
+        break;
+        case 6:
+          player.addForce(new PVector(0,-jumpForce*4,0));
+        break;
+        case 7:
+          acceleration.x = velocity.x;
+          acceleration.z = velocity.z;
+        break;
+        case 11:
+          if(num == 3){
+            position.x = box.x;
+            position.y = box.y - size.x;
+            position.z = box.z;
+          }
+          print(num + "\n");
+        break;
+      }
+      plat.triggerDown();  
+      
+      //bouncingplatform
+       velocity.y = 0f;
+       isFloor = true;
+       nPlat = num;
+    } else{
+      if(num == nPlat){
+        isFloor = false;
       }
       
-      if(num == 3){
-        player.addForce(new PVector(0,-jumpForce*4,0));
-      }
-      else if(num == 7){
-        velocity.y = 0f;
-        pushMatrix();
-        
-        translate(box.x+100,box.y-350,box.z-200);
-        rotateY(radians(-90));
-        fill(0);
-        textSize(100);
-        text("Meta",10,10);
-        fill(255);
-        popMatrix();
-      }
-      else{
-        velocity.y = 0f;
-      }
-    } 
-    
+    }
+    //Colision indirecta (deteccion por esta por encima de la plataforma
+    if(position.y <= box.y - radius - size.y && position.x > box.x-size.x && position.x < box.x+size.x && position.z > box.z-size.z && position.z < box.z+size.z){
+      if(plat.getID() == 2){
+        if(position.y > box.y-1500){
+          velocity.y -= 4f;
+        } else{
+          velocity.y -= 0.25f;
+        }
+      } 
+    }
+    print(nPlat + "\n");
   }
   void control() {
     PVector controlForce = new PVector(0, 0, 0);
@@ -104,7 +142,11 @@ class Player {
   }
   
   void jump() {
-    player.addForce(new PVector(0,-jumpForce,0));
+    //no es mio este trabajo
+    //if(isFloor){
+      player.addForce(new PVector(0,-jumpForce,0));
+    //}
+    
   }
   
   void display() {
