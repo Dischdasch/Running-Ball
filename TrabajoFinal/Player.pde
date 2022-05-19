@@ -42,7 +42,6 @@ class Player {
       num++;
       collisionBoxDetection(b,num);  
     }
-    
   }
   void addForce(PVector force) {
     acceleration.add(force.copy());

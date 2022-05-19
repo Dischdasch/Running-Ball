@@ -8,6 +8,8 @@ PVector gravity;
 HashMap<Character, Boolean> keys;
 ArrayList<PVector> pos = new ArrayList<PVector>();
 
+Fluid fluid;
+
 void setup() {
   size(640, 480, P3D);
   
@@ -39,6 +41,8 @@ void setup() {
   
   
   gravity = new PVector(0, 1, 0);
+
+  fluid = new Fluid(0, true);
 }
 
 void draw() {
@@ -56,7 +60,7 @@ void draw() {
     platform.display();
   }
   
-  
+  fluid.update();
 }
 
 void keyPressed() {
