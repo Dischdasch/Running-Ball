@@ -1,11 +1,9 @@
-import java.util.Map;
 
 Player player;
 ArrayList<Platform> platforms;
 Camera cam;
 PVector gravity;
-
-HashMap<Character, Boolean> keys;
+ControllerManager controllerManager = new ControllerManager();
 ArrayList<Platform> plat  = new ArrayList<Platform>();
 
 void setup() {
@@ -38,11 +36,7 @@ void setup() {
   plat.add(new SlidingPlatform(3000,-2000,-2000, 10, 1, 10, 0, 0, 0,sizeH));
   plat.add(new BreakablePlatform(3000,-2000,2000, 10, 1, 10, 0, 0, 0,sizeH));
   plat.add(new GoalPlatform(7400,-1800,600,10,1,10,0,0,0,sizeL));
-  keys = new HashMap<Character, Boolean>();
-  keys.put('w', false);
-  keys.put('s', false);
-  keys.put('a', false);
-  keys.put('d', false);
+
   player = new Player(width/2, height/2, 0);
   cam = new Camera(player.position, 500, 50, 5000);
   
@@ -56,7 +50,7 @@ void draw() {
   background(255);
   directionalLight(255,255,255,1,1,-1);
   
-  player.control();
+  player.controlling();
   player.addForce(gravity);
   player.update();
   player.display();
@@ -65,18 +59,4 @@ void draw() {
     platform.display();
     platform.update();
   }
-  
-  
-}
-
-void keyPressed() {
-  keys.put(key, true);
-  if (key == ' '){
-    player.jump();
-  }
- 
-}
-
-void keyReleased() {
-  keys.put(key, false);
 }

@@ -125,20 +125,41 @@ class Player {
     }
     print(nPlat + "\n");
   }
-  void control() {
-    PVector controlForce = new PVector(0, 0, 0);
-    if (keys.get('w')) {
-      controlForce.x = 1;
-    } else if (keys.get('s')) {
-      controlForce.x = -1;
+
+  void controlling() {
+    Control [] controls = controllerManager.getActions();
+    PVector controlForce = new PVector(0,0,0);
+
+    for (Control control: controls) {
+      controlForce = processControl(control);
     }
-    if (keys.get('a')) {
-      controlForce.z = -1;
-    } else if (keys.get('d')) {
-      controlForce.z = 1;
-    }
+
     controlForce.setMag(movementForce);
     player.addForce(controlForce);
+  }
+
+  private PVector processControl(Control control){
+    PVector controlForce = new PVector(0, 0, 0);
+    switch (control) {
+      case FORWARD:
+        controlForce.x = 1;
+        break;
+      case BACK:
+        controlForce.x = -1;
+        break;
+      case LEFT:
+        controlForce.z = -1;
+        break;
+      case RIGHT:
+        controlForce.z = 1;
+        break;
+      case JUMP:
+        jump();
+        break;
+      default:
+        break;
+    }
+    return controlForce;
   }
   
   void jump() {
