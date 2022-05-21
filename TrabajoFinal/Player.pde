@@ -11,6 +11,9 @@ class Player {
   float movementForce = 2f;
   float maxSpeed = 25;
   float jumpForce = 20f;
+
+  //Platform ID
+ 
   
   //Plataforma y si esta en el suelo
   int nPlat;
@@ -46,6 +49,11 @@ class Player {
       collisionBoxDetection(b,num);  
     }
   }
+
+  void updateCollision(Platform b){
+    collisionBoxDetection(b,11);
+  }
+
   void addForce(PVector force) {
     acceleration.add(force.copy());
   }
@@ -97,7 +105,6 @@ class Player {
             position.y = box.y - size.x;
             position.z = box.z;
           }
-          print(num + "\n");
         break;
       }
       plat.triggerDown();  

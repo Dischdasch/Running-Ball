@@ -51,7 +51,7 @@ void setup() {
   
   gravity = new PVector(0, 1, 0);
 
-  fluid = new Fluid(0, true);
+  fluid = new Fluid(5000, true);
 }
 
 void draw() {
@@ -65,11 +65,11 @@ void draw() {
   player.update();
   player.display();
   player.updateCollision(plat);
+  player.updateCollision(fluid.getPlatform());
   for (Platform platform : plat) {
     platform.display();
     platform.update();
   }
-  
   fluid.update();
 }
 
