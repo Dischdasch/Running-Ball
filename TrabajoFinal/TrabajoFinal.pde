@@ -5,10 +5,12 @@ Camera cam;
 PVector gravity;
 ControllerManager controllerManager = new ControllerManager();
 ArrayList<Platform> plat  = new ArrayList<Platform>();
+SelectScreen selectUI;
 
 void setup() {
-  size(640, 480, P3D);
+  size(1280, 720, P3D);
   
+  selectUI = new SelectScreen();
   
   //tamaño
   PVector sizeL = new PVector(100,400,100);
@@ -45,6 +47,11 @@ void setup() {
 }
 
 void draw() {
+  
+  if(selectUI.shown)
+  {
+  selectUI.screenDraw();
+  } else {
   cam.update();
   
   background(255);
@@ -59,4 +66,10 @@ void draw() {
     platform.display();
     platform.update();
   }
+  }
+}
+
+void mousePressed()
+{
+  selectUI.screenMousePressed();
 }
