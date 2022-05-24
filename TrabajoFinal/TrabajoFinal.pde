@@ -1,4 +1,4 @@
-
+import processing.sound.*;
 Player player;
 ArrayList<Platform> platforms;
 Camera cam;
@@ -6,6 +6,8 @@ PVector gravity;
 ControllerManager controllerManager = new ControllerManager();
 ArrayList<Platform> plat  = new ArrayList<Platform>();
 SelectScreen selectUI;
+SoundFile music;
+float speed = 1.0;
 
 void setup() {
   size(1280, 720, P3D);
@@ -42,6 +44,8 @@ void setup() {
   player = new Player(width/2, height/2, 0);
   cam = new Camera(player.position, 500, 50, 5000);
   
+  music = new SoundFile(this, "music.mp3");
+  music.loop();
   
   gravity = new PVector(0, 1, 0);
 }
@@ -66,10 +70,33 @@ void draw() {
     platform.display();
     platform.update();
   }
+  playMusic(player.velocity.mag());
   }
 }
 
 void mousePressed()
 {
   selectUI.screenMousePressed();
+}
+
+void mouseReleased()
+{
+  if (selectUI.changeMusic && !music.isPlaying())
+  {
+    music.loop();
+    selectUI.changeMusic = false;
+  }
+  else if (selectUI.changeMusic)
+  {    
+    music.pause();
+    selectUI.changeMusic = false;
+  }
+}
+
+void playMusic(float speed) {
+  float velocity = map(speed, 0.0, 25.0, 0.75, 1.25);
+  if(velocity > 1.25){
+    velocity = 1.25;
+  }
+  music.rate(velocity);
 }

@@ -21,9 +21,11 @@ class SelectScreen{
   int musicButtonSize = 70;
   int r;
   boolean music = true;
+  boolean changeMusic = false;
   PImage noteImg;
   int noteOffset = 30;
   boolean sound = true;
+  boolean changeSound = false;
   PImage speakerImg;
   int speakerOffset = 40;
 
@@ -59,9 +61,9 @@ void screenDraw() {
   strokeWeight(2);
   
   //User Instruction
-  fill(0);
+  fill(255);
   textSize(50);
-  text("Click on a level to play", 410, 60);
+  text("Click on a Level to Play", 410, 60);
   
   //Buttons for each level
   level1.drawButton();
@@ -103,11 +105,13 @@ void screenMousePressed() {
   if (overCircle(musicButtonX, musicButtonY, musicButtonSize))
   {
     music = !music;
+    changeMusic = true;
   } 
   //turn sound on/off
   else if (overCircle(soundButtonX, soundButtonY, musicButtonSize))
   {
    sound = !sound;
+   changeSound = true;
   } 
   //Start level or show error
   else {
