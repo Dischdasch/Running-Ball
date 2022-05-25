@@ -44,7 +44,7 @@ void setup() {
   player = new Player(width/2, height/2, 0);
   cam = new Camera(player.position, 500, 50, 5000);
   
-  music = new SoundFile(this, "music.mp3");
+  music = new SoundFile(this, "music2.mp3");
   music.loop();
   
   gravity = new PVector(0, 1, 0);
