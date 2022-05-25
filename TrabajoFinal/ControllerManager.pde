@@ -4,7 +4,7 @@ public enum Control { JUMP, FORWARD, BACK, LEFT, RIGHT,
          CAMERA_LEFT, CAMERA_RIGHT, CAMERA_UP, CAMERA_DOWN };
 
 public class ControllerManager {
-    private HashMap<Control, Boolean> actionMap;
+    public HashMap<Control, Boolean> actionMap;
     private HashMap<Character, Control> mappings;
 
     public ControllerManager(){
@@ -47,12 +47,4 @@ public class ControllerManager {
       }
       return result;
     }
-}
-
-void keyPressed() {
-  controllerManager.keyPressed(key);
-}
-
-void keyReleased() {
-  controllerManager.keyReleased(key);
 }

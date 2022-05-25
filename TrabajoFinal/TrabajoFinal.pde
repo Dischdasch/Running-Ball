@@ -100,3 +100,12 @@ void playMusic(float speed) {
   }
   music.rate(velocity);
 }
+
+void keyPressed() {
+  controllerManager.keyPressed(key);
+  player.onKeyPressedOnce();
+}
+
+void keyReleased() {
+  controllerManager.keyReleased(key);
+}
