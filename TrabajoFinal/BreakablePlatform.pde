@@ -59,7 +59,6 @@ class BreakablePlatform extends Platform{
          position.x = posInicial.x;
          position.y = posInicial.y;
          position.z = posInicial.z;
-         print(posInicial);
        }
        cl = color(0,255,0);
        break;

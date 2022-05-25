@@ -77,7 +77,7 @@ class Player {
           velocity.z += velocity.z*0.04f;
           break;
         case 6:
-          player.addForce(new PVector(0, -jumpForce*4, 0));
+          player.addForce(new PVector(0, -jumpForce*3, 0));
           break;
         case 7:
           acceleration.x = velocity.x;
@@ -89,7 +89,6 @@ class Player {
             position.y = box.y - size.x;
             position.z = box.z;
           }
-          print(num + "\n");
           break;
       }
       plat.triggerDown();  
@@ -113,7 +112,6 @@ class Player {
         }
       }
     }
-    print(nPlat + "\n");
   }
 
   void controlling() {
