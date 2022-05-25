@@ -11,9 +11,9 @@ SelectScreen selectUI;
 SoundFile music;
 SoundFile collectableSound;
 PShape coinModel, flagModel;
-PShader standardShader;
+PShader standardShader, flagShader;
 PImage coinTexture, coinHeight, whiteTexture;
-Material coinMaterial;
+Material coinMaterial, flagMaterial;
 float speed = 1.0;
 int collectableCount = 0;
 float fogIntensity = 100;
@@ -31,10 +31,13 @@ void setup() {
   
   coinModel = loadShape("Models/coin.obj");
   flagModel = loadShape("Models/flag.obj");
-  standardShader = loadShader("shaders/StandardFrag.glsl", "shaders/StandardVert.glsl");
+  standardShader = loadShader("Shaders/StandardFrag.glsl", "Shaders/StandardVert.glsl");
+  flagShader = loadShader("Shaders/StandardFrag.glsl", "Shaders/WindVert.glsl");
   coinTexture = loadImage("Textures/CoinTexture.jpg");
   coinHeight = loadImage("Textures/CoinHeight.png");
-  coinMaterial = new Material(standardShader, .5f, 1.0, 1.0, backgroundColor, one, one, coinTexture, 1.0, coinHeight, 5.0);
+  whiteTexture = loadImage("Textures/white.jpg");
+  coinMaterial = new Material(standardShader, .5f, 1.0, 1.0, backgroundColor, one, one, coinTexture, 1.0, coinHeight, 1.0);
+  flagMaterial = new Material(flagShader, .5f, 1.0, 0.0, backgroundColor, one, one, whiteTexture, 1.0, whiteTexture, 1.0);
   
   collectableSound = new SoundFile(this, "Audio/collect.wav");
   music = new SoundFile(this, "Audio/music2.mp3");

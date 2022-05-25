@@ -10,7 +10,7 @@ class Camera {
   }
   
   void update() {
-    if (mousePressed) angle += (mouseX - pmouseX);
+    if (mousePressed) angle += (mouseX - pmouseX)*0.01;
     position = new PVector(target.x - distance*cos(angle), target.y - 200 , target.z - distance*-sin(angle));
     camera(position.x, position.y, position.z, target.x, target.y, target.z, 0, 1, 0);
   }
