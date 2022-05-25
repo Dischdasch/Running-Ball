@@ -3,7 +3,6 @@ class SelectScreen{
   color baseColor = color(#DCFAF7);
   color currentColor;
   boolean shown = true;
-  PImage title; 
   PImage background;
 
   //Level Buttons
@@ -15,9 +14,9 @@ class SelectScreen{
   LevelButton[] buttons;
 
   //Sound and Music Buttons
-  int soundButtonX = 50;
-  int soundButtonY = 660;
-  int musicButtonX = 135;
+  int soundButtonX = 1220;
+  int soundButtonY = 580;
+  int musicButtonX = 1220;
   int musicButtonY = 660;
   int musicButtonSize = 70;
   int r;
@@ -37,11 +36,12 @@ class SelectScreen{
   
   SelectScreen() {
     
+  background = loadImage("background3.jpg");
   //Instaciate Level Buttons
-  level1 = new LevelButton(width/2 - 2*buttonSize - 45,  height/2 - 100, buttonSize, color(0), color(50), true, "1");
-  level2 = new LevelButton(width/2 - buttonSize - 15,  height/2 - 50, buttonSize, color(0), color(50), false, "2");
-  level3 = new LevelButton(width/2 +15, height/2 , buttonSize, color(0), color(50), false, "3");
-  level4 = new LevelButton(width/2 + buttonSize + 45, height/2 +50, buttonSize, color(0), color(50), false, "4");
+  level1 = new LevelButton(width/2 - buttonSize - 10, height/2 - buttonSize -10, buttonSize, color(0), color(50), true, "1");
+  level2 = new LevelButton(width/2 + 10, height/2 - buttonSize -10, buttonSize, color(0), color(50), false, "2");
+  level3 = new LevelButton(width/2 - buttonSize -10, height/2 + 10, buttonSize, color(0), color(50), false, "3");
+  level4 = new LevelButton(width/2 + 10, height/2 + 10, buttonSize, color(0), color(50), false, "4");
 
   buttons = new LevelButton[]{level1, level2, level3, level4};
   
@@ -50,27 +50,20 @@ class SelectScreen{
   //Load Sound Icons
   noteImg = loadImage("Note.png");
   speakerImg = loadImage("Speaker.png");
-  
-  //Load layout images
-  title = loadImage("title.png");
-  background = loadImage("background.jpg");
 
   r = musicButtonSize/2;
 }
 
 void screenDraw() {
-  background(color(240));
+  background(color(#DCFAF7));
+  background.resize(1280, 780);
+  image(background, 0, 0);
   strokeWeight(2);
   
-  background.resize(1360, 780);
-  image(background, 0,0);
-  
-  title.resize(1200, 100);
-  image(title, 40, 50);
   //User Instruction
-  fill(240);
+  fill(255);
   textSize(50);
-  text("Choose a Level to Start", 400, 240);
+  text("Click on a Level to Play", 410, 60);
   
   //Buttons for each level
   level1.drawButton();
@@ -100,7 +93,7 @@ void screenDraw() {
   {
     if (mouseOverLevel(button) && !button.buttonFree && !showErrorMessage)
     {
-      fill(200);
+      fill(0);
       textSize(30);
       text("Level " + button.levelName + " is not Available yet", 470, 680);
     }
@@ -155,7 +148,7 @@ void levelOrError(LevelButton button) //opens the level or shows error
 
 void showErrorMessage(String message)
 {
-  fill(200);
+  fill(0);
   textSize(30);
   text(message, 425, 680);
 }
