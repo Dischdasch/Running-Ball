@@ -100,7 +100,7 @@ void screenDraw() {
   {
     if (mouseOverLevel(button) && !button.buttonFree && !showErrorMessage)
     {
-      fill(0);
+      fill(200);
       textSize(30);
       text("Level " + button.levelName + " is not Available yet", 470, 680);
     }
@@ -155,7 +155,7 @@ void levelOrError(LevelButton button) //opens the level or shows error
 
 void showErrorMessage(String message)
 {
-  fill(0);
+  fill(200);
   textSize(30);
   text(message, 425, 680);
 }
