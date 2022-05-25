@@ -26,7 +26,7 @@ class MovingPlatform extends Platform{
   void update(){
     mov += acc;
     position.z+= acc;
-    if(mov > 400 || mov < -800){
+    if(mov > 200 || mov < 0){
         acc *= -1;
     }
   }

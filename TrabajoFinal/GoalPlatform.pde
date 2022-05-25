@@ -36,9 +36,9 @@ class GoalPlatform extends Platform{
       fill(255,0,0);
     }
     
-    box(10,500,10);
-    translate(0,-400,245);
-    box(10,400,500);
+    scale(100, 100, 100);
+    rotateX(PI);
+    shape(flagModel);
     popMatrix();
     fill(255);
   }

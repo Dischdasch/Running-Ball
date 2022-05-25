@@ -1,5 +1,5 @@
 /*
-  ID plataformas:
+  ID platforms:
   0: Platform
   1: MovingPlatform
   2: WindPlatform
