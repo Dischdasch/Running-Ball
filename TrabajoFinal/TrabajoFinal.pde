@@ -20,6 +20,8 @@ float fogIntensity = 100;
 PVector backgroundColor;
 PVector one = new PVector(1,1,1);
 
+Fluid fluid;
+
 void setup() {
   size(1280, 720, P3D);
   
@@ -73,6 +75,8 @@ void setup() {
   }
   
   gravity = new PVector(0, 1, 0);
+
+  fluid = new Fluid(5000, true);
 }
 
 void draw() {
@@ -96,6 +100,7 @@ void draw() {
     }
     playMusic(player.velocity.mag());
     handleCollectables();
+    fluid.update();
     popMatrix();
     drawUI();
   }
