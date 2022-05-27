@@ -100,6 +100,7 @@ void draw() {
     }
     playMusic(player.velocity.mag());
     handleCollectables();
+    fluid.update();
     popMatrix();
     drawUI();
   }

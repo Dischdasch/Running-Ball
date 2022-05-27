@@ -1,11 +1,11 @@
 #ifdef GL_ES
   precision mediump float;
-precision mediump int;
+  precision mediump int;
 #endif
 
 #define PROCESSING_LIGHT_SHADER
 
-  uniform sampler2D texMap;
+uniform sampler2D texMap;
 uniform sampler2D bumpMap;
 uniform float bumpScale;
 uniform float specularIntensity;

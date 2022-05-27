@@ -11,6 +11,7 @@ class Player {
   float movementForce = 2f;
   float maxSpeed = 25;
   float jumpForce = 30f;
+  private PVector controlForce = new PVector(0, 0, 0);
 
   //Plataforma y si esta en el suelo
   int nPlat;
@@ -121,35 +122,33 @@ class Player {
 
   void controlling() {
     Control [] controls = controllerManager.getActions();
-    PVector controlForce = new PVector(0, 0, 0);
+    controlForce = new PVector(0, 0, 0);
 
     for (Control control : controls) {
-      controlForce = processControl(control);
+      processControl(control);
     }
 
     controlForce.setMag(movementForce);
     player.addForce(controlForce);
   }
 
-  private PVector processControl(Control control) {
-    PVector controlForce = new PVector(0, 0, 0);
+  private void processControl(Control control) {
     switch (control) {
     case FORWARD:
-      controlForce.x = 1;
+      controlForce.x += 1;
       break;
     case BACK:
-      controlForce.x = -1;
+      controlForce.x += -1;
       break;
     case LEFT:
-      controlForce.z = -1;
+      controlForce.z += -1;
       break;
     case RIGHT:
-      controlForce.z = 1;
+      controlForce.z += 1;
       break;
     default:
       break;
     }
-    return controlForce;
   }
   
   // Necesitamos un evento para cuando una tecla se pusa una sola vez, como en el salto, y no continuamente
