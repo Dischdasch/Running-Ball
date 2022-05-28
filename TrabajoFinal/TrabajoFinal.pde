@@ -76,7 +76,7 @@ void setup() {
   
   gravity = new PVector(0, 1, 0);
 
-  fluid = new Fluid(5000, true);
+  fluid = new Fluid(2000, true);
 }
 
 void draw() {
