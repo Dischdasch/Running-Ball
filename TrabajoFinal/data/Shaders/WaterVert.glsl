@@ -4,7 +4,7 @@ uniform mat4 modelviewMatrix;
 uniform mat4 transformMatrix;
 uniform mat3 normalMatrix;
 uniform mat4 texMatrix;
-
+uniform float u_time;
 uniform vec3 lightNormal[8];
 
 
@@ -25,8 +25,11 @@ varying float vertShininess;
 varying vec3 lightDir;
 
 void main() {
-  //Vértice en coordenadas transformadas 
-  gl_Position = transformMatrix * position;
+  //Vértice en coordenadas transformadas
+  vec4 worldPos = transformMatrix * position;
+  worldPos.x += 100*sin(u_time);
+  worldPos.z += 100*cos(u_time);
+  gl_Position = worldPos;
   
   //Coordenada de textura
   vertTexCoord = texMatrix * vec4(texCoord, 1.0, 1.0);

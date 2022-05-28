@@ -6,7 +6,7 @@ class Fluid {
     private final String textureMap = "data/Shaders/Water_002_SD/Water_002_COLOR.jpg";
     private final String bumpMap = "data/Shaders/Water_002_SD/Water_002_ROUGH.jpg";
     private final String fragmentShaderPath = "./data/Shaders/StandardFrag.glsl";
-    private final String vertexShaderPath = "./data/Shaders/StandardVert.glsl";
+    private final String vertexShaderPath = "./data/Shaders/WaterVert.glsl";
     PShader shader;
 
     public Fluid(float height, boolean isWater){
