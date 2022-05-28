@@ -44,12 +44,13 @@ class Platform {
     noStroke();
     pushMatrix();
     translate(position.x, position.y, position.z);
-    scale(scale.x, scale.y, scale.z);
-    rotateX(rotation.x);
+    scale(0.5f*scale.x, 0.5f*scale.y, 0.5f*scale.z);
+    rotateX(PI + rotation.x);
     rotateY(rotation.y);
     rotateZ(rotation.z);
-    // shader(material);
-    box(size.x,size.y,size.z);
+    platformMaterial.setMaterial();
+    shape(blockModel);
+    resetShader();
     popMatrix();
     pushMatrix();
     translate(position.x, position.y, position.z);

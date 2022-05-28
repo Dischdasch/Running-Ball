@@ -10,11 +10,11 @@ ArrayList<Collectable> toBeRemoved = new ArrayList<Collectable>();
 SelectScreen selectUI;
 SoundFile music;
 SoundFile collectableSound;
-PShape coinModel, flagModel;
+PShape coinModel, flagModel, blockModel;
 PShader standardShader, flagShader;
-PImage coinTexture, coinHeight, whiteTexture, grayTexture, flagTexture;
+PImage coinTexture, coinHeight, whiteTexture, grayTexture, flagTexture, platformTexture;
 PImage coinIcon;
-Material coinMaterial, flagMaterial;
+Material coinMaterial, flagMaterial, platformMaterial;
 float speed = 1.0;
 int collectableCount = 0;
 float fogIntensity = 100;
@@ -39,6 +39,7 @@ void setup() {
   
   coinModel = loadShape("Models/coin.obj");
   flagModel = loadShape("Models/flag.obj");
+  blockModel = loadShape("Models/SplitBlock.obj");
   standardShader = loadShader("Shaders/StandardFrag.glsl", "Shaders/StandardVert.glsl");
   flagShader = loadShader("Shaders/StandardFrag.glsl", "Shaders/WindVert.glsl");
   coinTexture = loadImage("Textures/CoinTexture.jpg");
@@ -46,8 +47,10 @@ void setup() {
   whiteTexture = loadImage("Textures/white.jpg");
   grayTexture = loadImage("Textures/Gray.jpg");
   flagTexture = loadImage("Textures/FlagTexture.jpg");
-  coinMaterial = new Material(standardShader, 0f, 1.0, 1.0, backgroundColor, one, one, coinTexture, 1.0, coinHeight, 1.0);
-  flagMaterial = new Material(flagShader, 0f, 1.0, 0.0, backgroundColor, one, one, flagTexture, 1.0, grayTexture, 1.0);
+  platformTexture = loadImage("Textures/PlatformTexture.jpg");
+  coinMaterial = new Material(standardShader, 0.5f, 1.0, 1.0, backgroundColor, one, one, one, coinTexture, 1.0, coinHeight, 1.0);
+  flagMaterial = new Material(flagShader, 0.5f, 1.0, 0.0, backgroundColor, one, one, one, flagTexture, 1.0, grayTexture, 1.0);
+  platformMaterial = new Material(standardShader, 0.5f, 1.0, 0.0, backgroundColor, one, one, one, platformTexture, 1.0, grayTexture, 1.0);
   
   coinIcon = loadImage("UI/CoinIcon.png");
   coinIcon.resize(50,50);
@@ -98,7 +101,7 @@ void draw() {
     cam.update();
     
     background(backgroundColor.x*255, backgroundColor.y*255, backgroundColor.z*255);
-    directionalLight(255,255,255,1,1,-1);
+    directionalLight(255,255,255, -1, 1, -1);
     
     player.controlling();
     player.addForce(gravity);
