@@ -13,12 +13,15 @@ SoundFile collectableSound;
 PShape coinModel, flagModel;
 PShader standardShader, flagShader;
 PImage coinTexture, coinHeight, whiteTexture;
+PImage coinIcon;
 Material coinMaterial, flagMaterial;
 float speed = 1.0;
 int collectableCount = 0;
 float fogIntensity = 100;
 PVector backgroundColor;
 PVector one = new PVector(1,1,1);
+PFont letterFont, numberFont;
+float musicVelocity = 1.0;
 
 Fluid fluid;
 
@@ -27,6 +30,9 @@ void setup() {
   
   selectUI = new SelectScreen();
   backgroundColor = new PVector(35f/255f, 161f/255f, 235f/255f);
+  letterFont = createFont("Fonts/SportypoRegular.ttf", 128);
+  numberFont = createFont("Fonts/Chopsic.otf", 128);
+  textFont(letterFont);
   
   player = new Player(width/2, height/2, 0);
   cam = new Camera(player.position, 500, 50, 5000);
@@ -40,6 +46,9 @@ void setup() {
   whiteTexture = loadImage("Textures/white.jpg");
   coinMaterial = new Material(standardShader, .5f, 1.0, 1.0, backgroundColor, one, one, coinTexture, 1.0, coinHeight, 1.0);
   flagMaterial = new Material(flagShader, .5f, 1.0, 0.0, backgroundColor, one, one, whiteTexture, 1.0, whiteTexture, 1.0);
+  
+  coinIcon = loadImage("UI/CoinIcon.png");
+  coinIcon.resize(50,50);
   
   collectableSound = new SoundFile(this, "Audio/collect.wav");
   music = new SoundFile(this, "Audio/music2.mp3");
@@ -71,7 +80,7 @@ void setup() {
   plat.add(new GoalPlatform(7400,-1800,600,10,1,10,0,0,0,sizeL));
   
   for (int i = 0; i < 20; i++) {
-    collectables.add(new Collectable(new PVector(2000 + 300*i, -2500, 0), 25, coinMaterial));
+    collectables.add(new Collectable(new PVector(2000 + 300*i, -2500, 0), 50, coinMaterial));
   }
   
   gravity = new PVector(0, 1, 0);
@@ -122,8 +131,11 @@ void drawUI() {
     stroke(255);
     fill(255);
     noLights();
+    image(coinIcon, width - 130, 15);
+    textFont(numberFont);
     textSize(32);
-    text(collectableCount, width -50, 50);
+    text(collectableCount, width - 50, 50);
+    textFont(letterFont);
     hint(ENABLE_DEPTH_TEST);
   }
 
@@ -144,11 +156,11 @@ void mouseReleased()
 }
 
 void playMusic(float speed) {
-  float velocity = map(speed, 0.0, 25.0, 0.75, 1.25);
-  if(velocity > 1.25){
-    velocity = 1.25;
+  musicVelocity = lerp(musicVelocity, map(speed, 0.0, player.maxSpeed, 0.75, 1.25), 0.1);
+  if(musicVelocity > 1.25){
+    musicVelocity = 1.25;
   }
-  music.rate(velocity);
+  music.rate(musicVelocity);
 }
 
 void keyPressed() {
