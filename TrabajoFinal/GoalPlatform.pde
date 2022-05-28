@@ -40,9 +40,10 @@ class GoalPlatform extends Platform{
     
     rotateX(PI);
     scale(100/scale.x, 100/scale.y, 100/scale.z);
-    flagMaterial.material.set("u_time", millis());
-    flagMaterial.material.set("windScale", 0.001f);
-    flagMaterial.material.set("windStrength", 50f);
+    translate(0, -1, 0);
+    flagMaterial.material.set("u_time", millis()/100f);
+    flagMaterial.material.set("windScale", 0.1);
+    flagMaterial.material.set("windStrength", 0.1);
     flagMaterial.setMaterial();
     shape(flagModel);
     popMatrix();

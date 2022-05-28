@@ -66,13 +66,13 @@ void main() {
   //snoise(position.xz + vec2(u_time)) * vertTexCoord.y
   //vec4 displacedPosition = (position + noiseScale);
   
-  vec4 worldPos = transformMatrix * position;
-  worldPos.x += snoise((worldPos.xz + u_time) * windScale) * windStrength * position.z;
-  worldPos.z += snoise((worldPos.xz + u_time + 100.0) * windScale) * windStrength * position.z;
-  gl_Position = worldPos;
+  vec4 modifiedPosition = position;
+  modifiedPosition.x += snoise((position.xz + u_time) * windScale) * windStrength * position.z;
+  modifiedPosition.z += snoise((position.xz + u_time + 100.0) * windScale) * windStrength * position.z;
+  gl_Position = transformMatrix * modifiedPosition;
   
   //Posición del vértice en coordenadas del ojo
-  vertPosition = vec3(modelviewMatrix * position);  
+  vertPosition = vec3(modelviewMatrix * modifiedPosition);  
   //Normal del vértice en coordenadas del ojo
   vertNormal = normalize(normalMatrix * normal);
   //Características de reflexión
