@@ -12,7 +12,7 @@ SoundFile music;
 SoundFile collectableSound;
 PShape coinModel, flagModel;
 PShader standardShader, flagShader;
-PImage coinTexture, coinHeight, whiteTexture;
+PImage coinTexture, coinHeight, whiteTexture, grayTexture;
 PImage coinIcon;
 Material coinMaterial, flagMaterial;
 float speed = 1.0;
@@ -44,8 +44,9 @@ void setup() {
   coinTexture = loadImage("Textures/CoinTexture.jpg");
   coinHeight = loadImage("Textures/CoinHeight.png");
   whiteTexture = loadImage("Textures/white.jpg");
+  grayTexture = loadImage("Textures/Gray.jpg");
   coinMaterial = new Material(standardShader, .5f, 1.0, 1.0, backgroundColor, one, one, coinTexture, 1.0, coinHeight, 1.0);
-  flagMaterial = new Material(flagShader, .5f, 1.0, 0.0, backgroundColor, one, one, whiteTexture, 1.0, whiteTexture, 1.0);
+  flagMaterial = new Material(flagShader, .5f, 1.0, 0.0, backgroundColor, one, one, whiteTexture, 1.0, grayTexture, 1.0);
   
   coinIcon = loadImage("UI/CoinIcon.png");
   coinIcon.resize(50,50);

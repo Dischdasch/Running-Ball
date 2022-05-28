@@ -69,7 +69,7 @@ void screenDraw() {
   image(title, 40, 50);
   //User Instruction
   fill(240);
-  textSize(50);
+  textSize(32);
   text("Choose a Level to Start", 400, 240);
   
   //Buttons for each level
