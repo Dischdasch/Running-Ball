@@ -29,6 +29,8 @@ Fluid fluid;
 void setup() {
   size(1280, 720, P3D);
   
+  ((PGraphics3D)g).textureWrap(Texture.REPEAT); // Textures repeat when scaled down
+  
   selectUI = new SelectScreen();
   backgroundColor = new PVector(35f/255f, 161f/255f, 235f/255f);
   letterFont = createFont("Fonts/SportypoRegular.ttf", 128);
