@@ -22,8 +22,13 @@ PVector backgroundColor;
 PVector one = new PVector(1,1,1);
 PFont letterFont, numberFont;
 float musicVelocity = 1.0;
+float movementForce = 2f;
+
+boolean dead = false;
+CircleButton deadButton;
 
 Fluid fluid;
+int fluidHeight = 2000;
 
 void setup() {
   size(1280, 720, P3D);
@@ -86,8 +91,8 @@ void setup() {
   }
   
   gravity = new PVector(0, 1, 0);
-
-  fluid = new Fluid(2000, true);
+  deadButton = new CircleButton(width/2, height/2, 50, color(200), color(255));
+  fluid = new Fluid(fluidHeight, true);
 }
 
 void draw() {
@@ -100,17 +105,20 @@ void draw() {
     background(backgroundColor.x*255, backgroundColor.y*255, backgroundColor.z*255);
     directionalLight(255,255,255,1,1,-1);
     
-    player.controlling();
-    player.addForce(gravity);
-    player.update();
-    player.display();
-    player.updateCollision(plat);
+    if(!dead){
+      player.controlling();
+      player.addForce(gravity);
+      player.update();
+      player.display();
+      player.updateCollision(plat);
+    }
     for (Platform platform : plat) {
       platform.display();
       platform.update();
     }
     playMusic(player.velocity.mag());
     handleCollectables();
+    checkDeath();
     fluid.update();
     popMatrix();
     drawUI();
@@ -129,17 +137,28 @@ void handleCollectables() {
 }
 
 void drawUI() {
-    hint(DISABLE_DEPTH_TEST);
-    stroke(255);
-    fill(255);
-    noLights();
-    image(coinIcon, width - 130, 15);
-    textFont(numberFont);
-    textSize(32);
-    text(collectableCount, width - 50, 50);
-    textFont(letterFont);
-    hint(ENABLE_DEPTH_TEST);
+  hint(DISABLE_DEPTH_TEST);
+  coinUI();
+  dieUI();
+  hint(ENABLE_DEPTH_TEST);
+}
+
+void coinUI(){
+  stroke(255);
+  fill(255);
+  noLights();
+  image(coinIcon, width - 130, 15);
+  textFont(numberFont);
+  textSize(32);
+  text(collectableCount, width - 50, 50);
+  textFont(letterFont);
+}
+
+void dieUI(){
+  if(dead){
+    text("dead", width/2, height/2);
   }
+}
 
 void mousePressed()
 {
@@ -172,4 +191,12 @@ void keyPressed() {
 
 void keyReleased() {
   controllerManager.keyReleased(key);
+}
+
+void checkDeath() {
+  if(player.position.y >= fluidHeight){
+    dead = true;
+  } else {
+    dead = false;
+  }
 }

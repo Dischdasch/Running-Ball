@@ -15,14 +15,14 @@ class Fluid {
         shader.set("bumpMap", loadImage(bumpMap));
         shader.set("bumpScale", 100.0);
         shader.set("specularIntensity", 1.0);
-        shader.set("diffuseIntensity", 1.0);
-        shader.set("ambientIntensity", 1.0);
+        shader.set("diffuseIntensity", 0.0);
+        shader.set("ambientIntensity", 0.0);
         shader.set("specularColor", 1.0, 1.0, 1.0);
         shader.set("diffuseColor", 1.0, 1.0, 1.0);
         shader.set("ambientColor", 1.0, 1.0, 1.0);
         shader.set("scale", 1.0);
         shader.set("fogIntensity", 0.0);
-        shader.set("u_time", millis()/1000);
+        shader.set("u_time", (float) millis()/1000);
         fluidHeight = height;
         fluidMesh = new Platform(0, fluidHeight, 0, 100000, 10, 100000, 0, 0, 0, new PVector(1, 1, 1));
         
