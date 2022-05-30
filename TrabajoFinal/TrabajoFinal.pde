@@ -37,9 +37,6 @@ void setup() {
   numberFont = createFont("Fonts/Chopsic.otf", 128);
   textFont(letterFont);
   
-  player = new Player(width/2, height/2, 0);
-  cam = new Camera(player.position, 500, 50, 5000);
-  
   // Shaders, textures, models and materials
   coinModel = loadShape("Models/coin.obj");
   flagModel = loadShape("Models/flag.obj");
@@ -69,6 +66,9 @@ void setup() {
   collectableSound = new SoundFile(this, "Audio/collect.wav");
   music = new SoundFile(this, "Audio/music2.mp3");
   music.loop();
+  
+  player = new Player(width/2, height/2, 0);
+  cam = new Camera(player.position, 500, 50, 5000);
   
   //tamaño
   PVector sizeL = new PVector(100,400,100);
@@ -114,11 +114,6 @@ void draw() {
     background(backgroundColor.x*255, backgroundColor.y*255, backgroundColor.z*255);
     directionalLight(255,255,255, -1, 1, -1);
     
-    player.controlling();
-    player.addForce(gravity);
-    player.update();
-    player.display();
-    player.updateCollision(plat);
     for (Platform platform : plat) {
       platform.display();
       platform.update();
@@ -126,6 +121,12 @@ void draw() {
     playMusic(player.velocity.mag());
     handleCollectables();
     fluid.update();
+    
+    player.controlling();
+    player.addForce(gravity);
+    player.update();
+    player.display();
+    player.updateCollision(plat);
     popMatrix();
     drawUI();
   }

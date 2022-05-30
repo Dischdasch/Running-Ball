@@ -1,7 +1,9 @@
 class Player {
   // Physics
   PVector position, velocity, acceleration;
+  float xAngle, zAngle, xAngleVelocity, zAngleVelocity;
   float dragIntensity = 1f;
+  boolean grounded = false;
 
   // Geometry
   float radius = 50;
@@ -12,14 +14,25 @@ class Player {
   float maxSpeed = 25;
   float jumpForce = 30f;
   private PVector controlForce = new PVector(0, 0, 0);
+  
+  // Graphics
+  PImage texture, heightMap;
+  PShape model;
+  Material material;
 
-  //Plataforma y si esta en el suelo
+  // Standing platform
   int nPlat;
-  boolean grounded = false;
+  
+  
   Player(float x, float y, float z) {
     this.position = new PVector(x, y, z);
     this.velocity = new PVector(0, 0, 0);
     this.acceleration = new PVector(0, 0, 0);
+    
+    model = loadShape("Models/Bunny.obj");
+    texture = loadImage("Textures/BunnyTexture.png");
+    heightMap = loadImage("Textures/BunnyHeight.png");
+    material = new Material(standardShader, 0.5f, 1.0, 0.0, backgroundColor, one, one, one, texture, 1.0, heightMap, 10.0);
   }
 
   void update() {
@@ -28,6 +41,13 @@ class Player {
     drag.mult(-1);
     drag.setMag(dragIntensity);
     addForce(drag);
+    
+    if (grounded) {
+      xAngleVelocity = velocity.z*0.01;
+      zAngleVelocity = velocity.x*0.01;
+    }
+    xAngle += xAngleVelocity;
+    zAngle += zAngleVelocity;
 
     PVector horizontalVelocity = velocity.copy();
     horizontalVelocity.y = 0f;
@@ -159,7 +179,6 @@ class Player {
   }
 
   void jump() {
-    //no es mio este trabajo
     if (grounded) {
       player.addForce(new PVector(0, -jumpForce, 0));
     }
@@ -169,8 +188,19 @@ class Player {
     noStroke();
     pushMatrix();
     translate(position.x, position.y, position.z);
+    pushMatrix();
+    rotateX(PI + xAngle);
+    rotateZ(zAngle);
+    scale(750);
+    material.setMaterial();
+    shape(model);
+    resetShader();
+    popMatrix();
+    fill(255,255,255,50);
     // shader(material);
     sphere(diameter); // This could be a 3D model
+    fill(255);
+    
     popMatrix();
     fill(0);
     pushMatrix();
