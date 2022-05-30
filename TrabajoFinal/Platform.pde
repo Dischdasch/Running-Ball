@@ -54,7 +54,7 @@ class Platform {
     popMatrix();
     pushMatrix();
     translate(position.x, position.y, position.z);
-    translate(0, -200, 0);
+    //translate(0, -200, 0);
 
     //text(position.x,10,10);
     popMatrix();

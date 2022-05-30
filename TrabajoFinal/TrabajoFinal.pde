@@ -10,11 +10,12 @@ ArrayList<Collectable> toBeRemoved = new ArrayList<Collectable>();
 SelectScreen selectUI;
 SoundFile music;
 SoundFile collectableSound;
-PShape coinModel, flagModel, blockModel;
+PShape coinModel, flagModel, blockModel, windPlatformModel;
 PShader standardShader, flagShader;
-PImage coinTexture, coinHeight, whiteTexture, grayTexture, flagTexture, platformTexture;
+PImage coinTexture, coinHeight, whiteTexture, grayTexture, flagTexture, 
+  platformTexture, iceTexture, iceHeight, stoneTexture, stoneHeight;
 PImage coinIcon;
-Material coinMaterial, flagMaterial, platformMaterial;
+Material coinMaterial, flagMaterial, platformMaterial, metalMaterial, iceMaterial;
 float speed = 1.0;
 int collectableCount = 0;
 float fogIntensity = 100;
@@ -37,9 +38,11 @@ void setup() {
   player = new Player(width/2, height/2, 0);
   cam = new Camera(player.position, 500, 50, 5000);
   
+  // Shaders, textures, models and materials
   coinModel = loadShape("Models/coin.obj");
   flagModel = loadShape("Models/flag.obj");
   blockModel = loadShape("Models/SplitBlock.obj");
+  windPlatformModel = loadShape("Models/WindPlatform.obj");
   standardShader = loadShader("Shaders/StandardFrag.glsl", "Shaders/StandardVert.glsl");
   flagShader = loadShader("Shaders/StandardFrag.glsl", "Shaders/WindVert.glsl");
   coinTexture = loadImage("Textures/CoinTexture.jpg");
@@ -48,9 +51,15 @@ void setup() {
   grayTexture = loadImage("Textures/Gray.jpg");
   flagTexture = loadImage("Textures/FlagTexture.jpg");
   platformTexture = loadImage("Textures/PlatformTexture.jpg");
+  iceTexture = loadImage("Textures/IceTexture.jpg");
+  iceHeight = loadImage("Textures/IceHeight.png");
+  stoneTexture = loadImage("Textures/PlatformTexture.jpg");
+  stoneHeight = loadImage("Textures/StoneHeight.png");
   coinMaterial = new Material(standardShader, 0.5f, 1.0, 1.0, backgroundColor, one, one, one, coinTexture, 1.0, coinHeight, 1.0);
   flagMaterial = new Material(flagShader, 0.5f, 1.0, 0.0, backgroundColor, one, one, one, flagTexture, 1.0, grayTexture, 1.0);
-  platformMaterial = new Material(standardShader, 0.5f, 1.0, 0.0, backgroundColor, one, one, one, platformTexture, 1.0, grayTexture, 1.0);
+  platformMaterial = new Material(standardShader, 0.5f, 1.0, 0.0, backgroundColor, one, one, one, stoneHeight, 1.0, stoneHeight, 1.0);
+  metalMaterial = new Material(standardShader, 0.5f, 1.0, 1.0, backgroundColor, one, one, one, grayTexture, 1.0, whiteTexture, 1.0);
+  iceMaterial = new Material(standardShader, 0.5f, 1.0, 1.0, backgroundColor, one, one, one, iceTexture, 1.0, iceHeight, 1.0);
   
   coinIcon = loadImage("UI/CoinIcon.png");
   coinIcon.resize(50,50);
