@@ -10,35 +10,64 @@ ArrayList<Collectable> toBeRemoved = new ArrayList<Collectable>();
 SelectScreen selectUI;
 SoundFile music;
 SoundFile collectableSound;
-PShape coinModel, flagModel;
-PShader standardShader;
-PImage coinTexture, coinHeight, whiteTexture;
-Material coinMaterial;
+PShape coinModel, flagModel, blockModel, windPlatformModel;
+PShader standardShader, flagShader;
+PImage coinTexture, coinHeight, whiteTexture, grayTexture, flagTexture, 
+  platformTexture, iceTexture, iceHeight, stoneTexture, stoneHeight;
+PImage coinIcon;
+Material coinMaterial, flagMaterial, platformMaterial, metalMaterial, iceMaterial;
 float speed = 1.0;
 int collectableCount = 0;
 float fogIntensity = 100;
 PVector backgroundColor;
 PVector one = new PVector(1,1,1);
+PFont letterFont, numberFont;
+float musicVelocity = 1.0;
+
+Fluid fluid;
 
 void setup() {
   size(1280, 720, P3D);
   
   selectUI = new SelectScreen();
   backgroundColor = new PVector(35f/255f, 161f/255f, 235f/255f);
+  letterFont = createFont("Fonts/SportypoRegular.ttf", 128);
+  numberFont = createFont("Fonts/Chopsic.otf", 128);
+  textFont(letterFont);
   
   player = new Player(width/2, height/2, 0);
   cam = new Camera(player.position, 500, 50, 5000);
   
+  // Shaders, textures, models and materials
   coinModel = loadShape("Models/coin.obj");
   flagModel = loadShape("Models/flag.obj");
-  standardShader = loadShader("shaders/StandardFrag.glsl", "shaders/StandardVert.glsl");
+  blockModel = loadShape("Models/SplitBlock.obj");
+  windPlatformModel = loadShape("Models/WindPlatform.obj");
+  standardShader = loadShader("Shaders/StandardFrag.glsl", "Shaders/StandardVert.glsl");
+  flagShader = loadShader("Shaders/StandardFrag.glsl", "Shaders/WindVert.glsl");
   coinTexture = loadImage("Textures/CoinTexture.jpg");
   coinHeight = loadImage("Textures/CoinHeight.png");
-  coinMaterial = new Material(standardShader, .5f, 1.0, 1.0, backgroundColor, one, one, coinTexture, 1.0, coinHeight, 5.0);
+  whiteTexture = loadImage("Textures/white.jpg");
+  grayTexture = loadImage("Textures/Gray.jpg");
+  flagTexture = loadImage("Textures/FlagTexture.jpg");
+  platformTexture = loadImage("Textures/PlatformTexture.jpg");
+  iceTexture = loadImage("Textures/IceTexture.jpg");
+  iceHeight = loadImage("Textures/IceHeight.png");
+  stoneTexture = loadImage("Textures/PlatformTexture.jpg");
+  stoneHeight = loadImage("Textures/StoneHeight.png");
+  coinMaterial = new Material(standardShader, 0.5f, 1.0, 1.0, backgroundColor, one, one, one, coinTexture, 1.0, coinHeight, 1.0);
+  flagMaterial = new Material(flagShader, 0.5f, 1.0, 0.0, backgroundColor, one, one, one, flagTexture, 1.0, grayTexture, 1.0);
+  platformMaterial = new Material(standardShader, 0.5f, 1.0, 0.0, backgroundColor, one, one, one, stoneHeight, 1.0, stoneHeight, 1.0);
+  metalMaterial = new Material(standardShader, 0.5f, 1.0, 1.0, backgroundColor, one, one, one, grayTexture, 1.0, whiteTexture, 1.0);
+  iceMaterial = new Material(standardShader, 0.5f, 1.0, 1.0, backgroundColor, one, one, one, iceTexture, 1.0, iceHeight, 1.0);
+  
+  coinIcon = loadImage("UI/CoinIcon.png");
+  coinIcon.resize(50,50);
   
   collectableSound = new SoundFile(this, "Audio/collect.wav");
   music = new SoundFile(this, "Audio/music2.mp3");
   music.loop();
+  
   
   /* Platform Size
     size = new PVector(x,y,z)
@@ -46,11 +75,14 @@ void setup() {
     y = alto
     z = ancho*
   */
+  
   PVector sizeS = new PVector(1000,400,1000);
   PVector sizeL = new PVector(3000,400,1000);
   PVector sizeH = new PVector(3000,100,3000);
   PVector sizeX2 = new PVector(3000,100,1000);
+  PVector sizeL2 = new PVector(1000,10000,1000);
   
+  //almacenar array acon posiciones
   ArrayList<PVector> pos = new ArrayList<PVector>();
   
   /* Insert common platform positions (id 0)
@@ -67,6 +99,7 @@ void setup() {
     plat.add(new Platform(p.x, p.y, p.z, 0, 0, 0,sizeL));
   }
   
+  plat.add(new Platform(10400,-1800,600, 0, 0, 0,sizeL2));
   plat.add(new FastPlatform(6500,-2000,-1900,0 ,0 ,0,sizeX2));
   plat.add(new BouncingPlatform(1000,800,-700, 0, 0 , 0,sizeS));
   plat.add(new MovingPlatform(1000,700,1500, 0, 0, 0,sizeL));
@@ -76,10 +109,12 @@ void setup() {
   plat.add(new GoalPlatform(7400,-1800,600,0,0,0,sizeL));
   
   for (int i = 0; i < 20; i++) {
-    collectables.add(new Collectable(new PVector(2000 + 300*i, -2500, 0), 25, coinMaterial));
+    collectables.add(new Collectable(new PVector(2000 + 300*i, -2500, 0), 50, coinMaterial));
   }
   
   gravity = new PVector(0, 1, 0);
+
+  fluid = new Fluid(5000, true);
 }
 
 void draw() {
@@ -90,7 +125,7 @@ void draw() {
     cam.update();
     
     background(backgroundColor.x*255, backgroundColor.y*255, backgroundColor.z*255);
-    directionalLight(255,255,255,1,1,-1);
+    directionalLight(255,255,255, -1, 1, -1);
     
     player.controlling();
     player.addForce(gravity);
@@ -103,6 +138,7 @@ void draw() {
     }
     playMusic(player.velocity.mag());
     handleCollectables();
+    fluid.update();
     popMatrix();
     drawUI();
   }
@@ -124,8 +160,11 @@ void drawUI() {
     stroke(255);
     fill(255);
     noLights();
+    image(coinIcon, width - 130, 15);
+    textFont(numberFont);
     textSize(32);
-    text(collectableCount, width -50, 50);
+    text(collectableCount, width - 50, 50);
+    textFont(letterFont);
     hint(ENABLE_DEPTH_TEST);
   }
 
@@ -146,11 +185,11 @@ void mouseReleased()
 }
 
 void playMusic(float speed) {
-  float velocity = map(speed, 0.0, 25.0, 0.75, 1.25);
-  if(velocity > 1.25){
-    velocity = 1.25;
+  musicVelocity = lerp(musicVelocity, map(speed, 0.0, player.maxSpeed, 0.75, 1.25), 0.1);
+  if(musicVelocity > 1.25){
+    musicVelocity = 1.25;
   }
-  music.rate(velocity);
+  music.rate(musicVelocity);
 }
 
 void keyPressed() {

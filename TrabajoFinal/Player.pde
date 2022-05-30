@@ -11,6 +11,7 @@ class Player {
   float movementForce = 2f;
   float maxSpeed = 25;
   float jumpForce = 30f;
+  private PVector controlForce = new PVector(0, 0, 0);
 
   //Plataforma y si esta en el suelo
   int nPlat;
@@ -45,6 +46,11 @@ class Player {
       collisionBoxDetection(b, num);
     }
   }
+
+  void updateCollision(Platform b){
+    collisionBoxDetection(b,11);
+  }
+
   void addForce(PVector force) {
     acceleration.add(force.copy());
   }
@@ -59,41 +65,31 @@ class Player {
     //Colision directa
     if (dist(position.x,0,box.x,0) < size.x + radius && dist(position.y+radius,0,box.y,0) < size.y + radius && dist(position.z,0,box.z,0) < size.z + radius) {
       //Collision below platform (usar plataforma de rebote)
-      if (dist(0,position.y,0,0, box.y + size.y,0) < size.y) {
-        position.y = box.y + radius*2 + size.y;
-        //rebote?
-        player.addForce(new PVector(0, jumpForce, 0));
+      if (dist(0,position.y,0,0, box.y - size.y,0) > radius*2) {
+        
+        //position.y = box.y + radius*2 + size.y;
+        //Deteccion por ancho o por largo
+        if(dist(position.z,0,box.z,0) < size.z + radius){
+          player.addForce(new PVector(0, 0, -velocity.z*3));
+        }
+        if((dist(position.x,0,box.x,0) < size.x + radius)){
+          player.addForce(new PVector(-velocity.x*3, 0, 0));
+        }
+        
+        player.addForce(new PVector(0, -velocity.y*2, 0));
       } else {
         position.y = box.y - radius*2 - size.y;
+        //bouncingplatform
+        grounded = true;
       }
-      switch(plat.getID()) {
-        case 1:
-          fill(0);
-          pushMatrix();
-          translate(box.x, box.y-radius*2-size.y, position.z-(position.z-box.z)/4);
-          sphere(120);
-          position.z -= (position.z-box.z*(box.z/position.z))/30f;
-          fill(255);
-          popMatrix();
-        case 3:
-          velocity.x += velocity.x*0.04f;
-          velocity.z += velocity.z*0.04f;
-          break;
-        case 6:
-          player.addForce(new PVector(0, -jumpForce*3, 0));
-          break;
-        case 7:
-          acceleration.x = velocity.x;
-          acceleration.z = velocity.z;
-          break;
+      if (grounded){
+        velocity.y = 0f;
       }
       plat.triggerDown();  
-
-      //bouncingplatform
-      velocity.y = 0f;
-      grounded = true;
+      plat.getEffect(this);
       nPlat = num;
     } else {
+      //nPlataforma == numero que esta pisando el jugador.
       if (num == nPlat) {
         grounded = false;
       }
@@ -112,35 +108,33 @@ class Player {
 
   void controlling() {
     Control [] controls = controllerManager.getActions();
-    PVector controlForce = new PVector(0, 0, 0);
+    controlForce = new PVector(0, 0, 0);
 
     for (Control control : controls) {
-      controlForce = processControl(control);
+      processControl(control);
     }
 
     controlForce.setMag(movementForce);
     player.addForce(controlForce);
   }
 
-  private PVector processControl(Control control) {
-    PVector controlForce = new PVector(0, 0, 0);
+  private void processControl(Control control) {
     switch (control) {
     case FORWARD:
-      controlForce.x = 1;
+      controlForce.x += 1;
       break;
     case BACK:
-      controlForce.x = -1;
+      controlForce.x += -1;
       break;
     case LEFT:
-      controlForce.z = -1;
+      controlForce.z += -1;
       break;
     case RIGHT:
-      controlForce.z = 1;
+      controlForce.z += 1;
       break;
     default:
       break;
     }
-    return controlForce;
   }
   
   // Necesitamos un evento para cuando una tecla se pusa una sola vez, como en el salto, y no continuamente

@@ -16,15 +16,21 @@ class GoalPlatform extends Platform{
     noStroke();
     pushMatrix();
     translate(position.x, position.y, position.z);
+    scale(size.x/200,size.y/200,size.z/200);
     rotateX(rotation.x);
     rotateY(rotation.y);
     rotateZ(rotation.z);
     // shader(material);
-    box(size.x,size.y,size.z);
+    box(200);
+    popMatrix();
+    
+    pushMatrix();
+    translate(position.x, position.y, position.z);
     translate(0,-size.y/2-100,0);
     if(isDown){
       pushMatrix();
       translate(100,-350,-400);
+      
       rotateY(radians(-90));
       fill(0);
       textSize(100);
@@ -35,9 +41,14 @@ class GoalPlatform extends Platform{
     } else{
       fill(255,0,0);
     }
+    scale(size.y/2,size.y/3,size.z/6);
     
-    scale(100, 100, 100);
     rotateX(PI);
+    translate(0, -1, 0);
+    flagMaterial.material.set("u_time", millis()/100f);
+    flagMaterial.material.set("windScale", 0.1);
+    flagMaterial.material.set("windStrength", 0.1);
+    flagMaterial.setMaterial();
     shape(flagModel);
     popMatrix();
     fill(255);

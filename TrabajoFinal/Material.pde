@@ -1,14 +1,15 @@
 class Material {
   float ambientIntensity, diffuseIntensity, specularIntensity;
-  PVector ambientColor, diffuseColor, specularColor;
+  PVector fogColor, ambientColor, diffuseColor, specularColor;
   PImage albedo, bumpMap;
   float scale, bumpScale;
   PShader material;
   
-  Material(PShader material, float ambientIntensity, float diffuseIntensity, float specularIntensity, PVector ambientColor, PVector diffuseColor, PVector specularColor, PImage albedo, float scale, PImage bumpMap, float bumpScale) {
+  Material(PShader material, float ambientIntensity, float diffuseIntensity, float specularIntensity, PVector fogColor, PVector ambientColor, PVector diffuseColor, PVector specularColor, PImage albedo, float scale, PImage bumpMap, float bumpScale) {
     this.ambientIntensity = ambientIntensity;
     this.diffuseIntensity = diffuseIntensity;
     this.specularIntensity = specularIntensity;
+    this.fogColor = fogColor.copy();
     this.ambientColor = ambientColor.copy();
     this.diffuseColor = diffuseColor.copy();
     this.specularColor = specularColor.copy();
@@ -24,6 +25,7 @@ class Material {
     material.set("ambientIntensity", ambientIntensity);
     material.set("diffuseIntensity", diffuseIntensity);
     material.set("specularIntensity", specularIntensity);
+    material.set("fogColor", fogColor);
     material.set("ambientColor", ambientColor.x, ambientColor.y, ambientColor.z);
     material.set("diffuseColor", diffuseColor.x, diffuseColor.y, diffuseColor.z);
     material.set("specularColor", specularColor.x, specularColor.y, specularColor.z);

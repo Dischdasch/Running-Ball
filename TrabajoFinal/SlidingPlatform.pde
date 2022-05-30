@@ -12,11 +12,13 @@ class SlidingPlatform extends Platform{
     noStroke();
     pushMatrix();
     translate(position.x, position.y, position.z);
-    rotateX(rotation.x);
+    scale(size.x/200,size.y/200,size.z/200);
+    rotateX(PI + rotation.x);
     rotateY(rotation.y);
     rotateZ(rotation.z);
-    // shader(material);
-    box(size.x,size.y,size.z);
+    iceMaterial.setMaterial();
+    shape(blockModel);
+    resetShader();
     popMatrix();
     pushMatrix();
     popMatrix();

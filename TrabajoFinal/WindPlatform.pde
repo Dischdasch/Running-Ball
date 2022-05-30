@@ -8,22 +8,21 @@ class WindPlatform extends Platform{
   }
   @Override
    void display() {
-    fill(120,120,255);
-    noStroke();
     pushMatrix();
     translate(position.x, position.y, position.z);
+    scale(size.x/2,size.y/2,size.z/2);
     rotateX(rotation.x);
     rotateY(rotation.y);
     rotateZ(rotation.z);
-    // shader(material);
-    box(size.x,size.y,size.z);
+    metalMaterial.setMaterial();
+    shape(windPlatformModel);
+    resetShader();
     popMatrix();
     pushMatrix();
     popMatrix();
-    fill(255);
   }
   @Override
   void update(){
-    rotation.y += 30;
+    rotation.y += 1;
   }
 }

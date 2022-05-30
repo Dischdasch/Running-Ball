@@ -22,7 +22,7 @@ class Collectable {
     pushMatrix();
     translate(position.x, position.y, position.z);
     rotateY(angle);
-    scale(diameter);
+    scale(radius);
     material.setMaterial();
     shape(model);
     popMatrix();
@@ -31,7 +31,7 @@ class Collectable {
   }
   
   boolean collidesWith(Player player) {
-    if (PVector.dist(player.position, this.position) < this.radius*1.5 + player.radius) {
+    if (PVector.dist(player.position, this.position) < this.radius*2.0 + player.radius) {
       collect();
       return true;
     }

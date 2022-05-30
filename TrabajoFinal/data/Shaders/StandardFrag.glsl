@@ -1,11 +1,11 @@
 #ifdef GL_ES
   precision mediump float;
-precision mediump int;
+  precision mediump int;
 #endif
 
 #define PROCESSING_LIGHT_SHADER
 
-  uniform sampler2D texMap;
+uniform sampler2D texMap;
 uniform sampler2D bumpMap;
 uniform float bumpScale;
 uniform float specularIntensity;
@@ -14,6 +14,7 @@ uniform float ambientIntensity;
 uniform vec3 specularColor;
 uniform vec3 diffuseColor;
 uniform vec3 ambientColor;
+uniform vec3 fogColor;
 uniform float scale;
 uniform float fogIntensity;
 
@@ -73,5 +74,5 @@ void main() {
     diffuseIntensity * intensity * diffuseColor +
     specularIntensity * specular * specularColor, 1.0);
 
-  gl_FragColor = mix(color * texColor, vec4(ambientColor, 1.0), pow(gl_FragCoord.z, fogIntensity));
+  gl_FragColor = mix(color * texColor, vec4(fogColor, 1.0), pow(gl_FragCoord.z, fogIntensity));
 }

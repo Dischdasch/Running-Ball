@@ -16,16 +16,28 @@ class FastPlatform extends Platform {
     fill(0, 125, 125);
     pushMatrix();
     translate(position.x, position.y, position.z);
+    scale(size.x/200,size.y/200,size.z/200);
     rotateX(rotation.x);
     rotateY(rotation.y);
     rotateZ(rotation.z);
     // shader(material);
-    box(size.x, size.y, size.z);
+    box(200);
     popMatrix();
     pushMatrix();
     popMatrix();
     fill(255);
     noStroke();
+
+    pushMatrix();
+    translate(position.x, position.y, position.z);
+
+    translate(-900, -350, -400);
+    rotateY(radians(-90));
+    fill(0);
+    textSize(100);
+    text("Casa de Aleksander", 10, 10);
+    fill(255);
+    popMatrix();
     fill(0, 255, 0);
   }
   void update() {

@@ -1,7 +1,7 @@
 class TeleportPlatform extends Platform {
   boolean isDown;
 
-  TeleportPlatform(float x, float y, float z, float xRotation, float yRotation, float zRotation, PVector _size){
+ TeleportPlatform(float x, float y, float z, float xRotation, float yRotation, float zRotation, PVector _size){
      super(x,y,z,xRotation,yRotation,zRotation,_size);
      isDown = false;
   }
