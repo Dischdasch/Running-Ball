@@ -13,11 +13,20 @@ SoundFile collectableSound;
 PShape coinModel, flagModel, blockModel, windPlatformModel;
 PShader standardShader, flagShader;
 PImage coinTexture, coinHeight, whiteTexture, grayTexture, flagTexture, 
-  platformTexture, iceTexture, iceHeight, stoneTexture, stoneHeight;
+  platformTexture, iceTexture, iceHeight, stoneTexture, stoneHeight, finishGoal;
 PImage coinIcon;
 Material coinMaterial, flagMaterial, platformMaterial, metalMaterial, iceMaterial;
 float speed = 1.0;
 int collectableCount = 0;
+//Fin escena
+boolean fin;
+int escena = 0;
+int preEscena = 1;
+Scene level1;
+Scene level2;
+Scene level3;
+Scene level4;
+
 float fogIntensity = 100;
 PVector backgroundColor;
 PVector one = new PVector(1,1,1);
@@ -35,6 +44,7 @@ void setup() {
   numberFont = createFont("Fonts/Chopsic.otf", 128);
   textFont(letterFont);
   
+  ((PGraphics3D)g).textureWrap(Texture.REPEAT); // Textures repeat when scaled down
   player = new Player(width/2, height/2, 0);
   cam = new Camera(player.position, 500, 50, 5000);
   
@@ -61,6 +71,8 @@ void setup() {
   metalMaterial = new Material(standardShader, 0.5f, 1.0, 1.0, backgroundColor, one, one, one, grayTexture, 1.0, whiteTexture, 1.0);
   iceMaterial = new Material(standardShader, 0.5f, 1.0, 1.0, backgroundColor, one, one, one, iceTexture, 1.0, iceHeight, 1.0);
   
+  finishGoal = loadImage("UI/FinishGoal.png");
+  finishGoal.resize(300,100);
   coinIcon = loadImage("UI/CoinIcon.png");
   coinIcon.resize(50,50);
   
@@ -68,49 +80,12 @@ void setup() {
   music = new SoundFile(this, "Audio/music2.mp3");
   music.loop();
   
+
   
-  /* Platform Size
-    size = new PVector(x,y,z)
-    x = largo*
-    y = alto
-    z = ancho*
-  */
-  
-  PVector sizeS = new PVector(1000,400,1000);
-  PVector sizeL = new PVector(3000,400,1000);
-  PVector sizeH = new PVector(3000,100,3000);
-  PVector sizeX2 = new PVector(3000,100,1000);
-  PVector sizeL2 = new PVector(1000,10000,1000);
-  
-  //almacenar array acon posiciones
-  ArrayList<PVector> pos = new ArrayList<PVector>();
-  
-  /* Insert common platform positions (id 0)
-    pos.add(new PVector(2000,-2000,0));
-    (x,y,z)
-  */
-  pos.add(new PVector(width/2,height,0));
-  pos.add(new PVector(2000,-2000,0));
-  pos.add(new PVector(2800,-2000,0));
-  pos.add(new PVector(4400,-2000,0));
-  pos.add(new PVector(6000,-2000,0));
-  pos.add(new PVector(8500,-2000,-2000));
-  for(PVector p : pos){
-    plat.add(new Platform(p.x, p.y, p.z, 0, 0, 0,sizeL));
-  }
-  
-  plat.add(new Platform(10400,-1800,600, 0, 0, 0,sizeL2));
-  plat.add(new FastPlatform(6500,-2000,-1900,0 ,0 ,0,sizeX2));
-  plat.add(new BouncingPlatform(1000,800,-700, 0, 0 , 0,sizeS));
-  plat.add(new MovingPlatform(1000,700,1500, 0, 0, 0,sizeL));
-  plat.add(new WindPlatform(1000,700,-1500, 0, 0, 0,sizeS));
-  plat.add(new SlidingPlatform(3000,-2000,-2000, 0, 0, 0,sizeH));
-  plat.add(new BreakablePlatform(3000,-2000,2000, 0, 0, 0,sizeH));
-  plat.add(new GoalPlatform(7400,-1800,600,0,0,0,sizeL));
-  
-  for (int i = 0; i < 20; i++) {
-    collectables.add(new Collectable(new PVector(2000 + 300*i, -2500, 0), 50, coinMaterial));
-  }
+  level1 = getLevel1();
+  level2 = getLevel2();
+  level3 = getLevel2();
+  level4 = getLevel2();
   
   gravity = new PVector(0, 1, 0);
 
@@ -118,56 +93,85 @@ void setup() {
 }
 
 void draw() {
-  if (selectUI.shown) {
-    selectUI.screenDraw();
-  } else {
-    pushMatrix();
-    cam.update();
-    
-    background(backgroundColor.x*255, backgroundColor.y*255, backgroundColor.z*255);
-    directionalLight(255,255,255, -1, 1, -1);
-    
-    player.controlling();
-    player.addForce(gravity);
-    player.update();
-    player.display();
-    player.updateCollision(plat);
-    for (Platform platform : plat) {
-      platform.display();
-      platform.update();
-    }
-    playMusic(player.velocity.mag());
-    handleCollectables();
-    fluid.update();
-    popMatrix();
-    drawUI();
+  
+  if (!selectUI.shown && escena == 0) {
+    escena = preEscena;
+  } 
+  switch (escena){
+    case 0:
+      selectUI.screenDraw();
+      break;
+    case 1:
+      level1.update();
+      if(level1.isFinished()) nextScene();
+      break;
+    case 2:
+      level2.update();
+      if(level2.isFinished()) nextScene();
+      break;
+    case 3:
+      level3.update();
+      if(level3.isFinished()) nextScene();
+      break;
+    case 4:
+      level4.update();
+      if(level4.isFinished()){
+        nextScene();
+        preEscena = 1;
+        selectUI.shown = true;
+        reloadLevels();
+      }
+      break;
   }
+  
 }
 
-void handleCollectables() {
-  for (Collectable collectable : collectables) {
-    collectable.display();
-    if (collectable.collidesWith(player)) toBeRemoved.add(collectable);
-  }
-  for (Collectable collectable : toBeRemoved) {
-    collectables.remove(collectable);
-  }
-  toBeRemoved.clear();
-}
 
-void drawUI() {
+
+void drawUI(int id) {
     hint(DISABLE_DEPTH_TEST);
-    stroke(255);
-    fill(255);
-    noLights();
-    image(coinIcon, width - 130, 15);
-    textFont(numberFont);
-    textSize(32);
-    text(collectableCount, width - 50, 50);
-    textFont(letterFont);
+    switch (id){
+      case 0:
+        stroke(255);
+        fill(255);
+        noLights();
+        image(coinIcon, width - 130, 15);
+        textFont(numberFont);
+        textSize(32);
+        text(collectableCount, width - 50, 50);
+        textFont(letterFont);
+        
+        break;
+      case 1:
+        stroke(255);
+        fill(255);
+        noLights();
+        image(finishGoal, width/2-150, height/2-50);
+        fill(0);
+        textSize(15);
+        text("Level (lvl) completed",width/2-130, height/2);
+        textSize(10);
+        text("Press SPACE to continue",width/2-110, height/2+20);
+        fill(255);
+        break;
+    }
+    
     hint(ENABLE_DEPTH_TEST);
+}
+//ya sea por reinicio o por finalizar, se reinicia
+void reloadLevels(){
+  level1 = getLevel1();
+  level2 = getLevel2();
+  level3 = getLevel2();
+  level4 = getLevel2();
+}
+void nextScene(){
+  escena += 1;
+  level1.init();
+  if(escena > 4){
+    escena = 0;
   }
-
+}
 void mousePressed()
 {
   selectUI.screenMousePressed();
@@ -195,6 +199,15 @@ void playMusic(float speed) {
 void keyPressed() {
   controllerManager.keyPressed(key);
   player.onKeyPressedOnce();
+  if (key == 'R' && escena != 0){
+    // preEscena hace que cuando se reinicia, vuelve a la escena en la que estaba antes, no usar
+    // si se puede usar la ui.
+     preEscena = escena;
+     escena = 0;
+     selectUI.shown = true;
+     reloadLevels();
+     level1.init();
+  }
 }
 
 void keyReleased() {

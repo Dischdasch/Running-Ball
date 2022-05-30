@@ -10,6 +10,9 @@ class GoalPlatform extends Platform{
   void triggerDown(){
     isDown = true;
   }
+  boolean isDown(){
+    return isDown;    
+  }
   @Override
    void display() {
     fill(0,0,0);
