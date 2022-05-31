@@ -57,11 +57,11 @@ void setup() {
   platformTexture = loadImage("Textures/PlatformTexture.jpg");
   iceTexture = loadImage("Textures/IceTexture.jpg");
   iceHeight = loadImage("Textures/IceHeight.png");
-  stoneTexture = loadImage("Textures/PlatformTexture.jpg");
+  stoneTexture = loadImage("Textures/StoneTexture.jpg");
   stoneHeight = loadImage("Textures/StoneHeight.png");
   coinMaterial = new Material(standardShader, 0.5f, 1.0, 1.0, backgroundColor, one, one, one, coinTexture, 1.0, coinHeight, 1.0);
   flagMaterial = new Material(flagShader, 0.5f, 1.0, 0.0, backgroundColor, one, one, one, flagTexture, 1.0, grayTexture, 1.0);
-  platformMaterial = new Material(standardShader, 0.5f, 1.0, 0.0, backgroundColor, one, one, one, stoneHeight, 1.0, stoneHeight, 1.0);
+  platformMaterial = new Material(standardShader, 0.5f, 1.0, 0.0, backgroundColor, one, one, one, stoneTexture, 1.0, stoneHeight, 1.0);
   metalMaterial = new Material(standardShader, 0.5f, 1.0, 1.0, backgroundColor, one, one, one, grayTexture, 1.0, whiteTexture, 1.0);
   iceMaterial = new Material(standardShader, 0.5f, 1.0, 1.0, backgroundColor, one, one, one, iceTexture, 1.0, iceHeight, 1.0);
   
