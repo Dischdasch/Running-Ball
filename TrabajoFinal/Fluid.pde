@@ -30,7 +30,7 @@ class Fluid {
     public void update(){
         pushMatrix();
         shader.set("u_time", millis()/1000f);
-        shader.set("fluidSpeed", 1.0);
+        shader.set("fluidSpeed", 0.1);
         shader(shader);
         translate(-50000, fluidHeight, -50000);
         rotateX(HALF_PI);
