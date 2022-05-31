@@ -5,7 +5,8 @@ class Player {
   float dragIntensity = 1f;
   boolean grounded = false;
   float cameraAngle;
-
+  int numcollisions = 0;
+  
   // Geometry
   float radius = 50;
   float diameter = 2*radius;
@@ -15,21 +16,19 @@ class Player {
   float maxSpeed = 25;
   float jumpForce = 30f;
   private PVector controlForce = new PVector(0, 0, 0);
-  
+
   // Graphics
   PImage texture, heightMap;
   PShape model;
   Material material;
-
+  
   // Standing platform
   int nPlat;
-  
   
   Player(float x, float y, float z) {
     this.position = new PVector(x, y, z);
     this.velocity = new PVector(0, 0, 0);
     this.acceleration = new PVector(0, 0, 0);
-    
     model = loadShape("Models/Bunny.obj");
     texture = loadImage("Textures/BunnyTexture.png");
     heightMap = loadImage("Textures/BunnyHeight.png");
@@ -42,14 +41,14 @@ class Player {
     drag.mult(-1);
     drag.setMag(dragIntensity);
     addForce(drag);
-    
+
     if (grounded) {
       xAngleVelocity = velocity.z*0.01;
       zAngleVelocity = velocity.x*0.01;
     }
     xAngle += xAngleVelocity;
     zAngle += zAngleVelocity;
-
+    
     PVector horizontalVelocity = velocity.copy();
     horizontalVelocity.y = 0f;
     horizontalVelocity.limit(maxSpeed);
@@ -77,59 +76,45 @@ class Player {
   }
 
   //colision box 2
+  /* box = platform initial position
+       size = platform size
+  */
   void collisionBoxDetection(Platform plat, int num) {
     PVector box = plat.getXYZ();
     PVector size = plat.getSize();
     //Colision directa
-    if (position.y > box.y - radius*2 - size.y && position.y < box.y - radius*2 + size.y && position.x > box.x-size.x- radius*2 && position.x < box.x+size.x- radius*2 && position.z > box.z-size.z && position.z < box.z+size.z) {
-      //Deteccion si viene de abajo (usar plataforma de rebote)
-      if (position.y > box.y - radius*2 + size.y/2.5 && position.y < box.y - radius*2 + size.y) {
-        position.y = box.y + radius*2 + size.y;
-        //rebote?
-        player.addForce(new PVector(0, jumpForce, 0));
+    if (dist(position.x,0,box.x,0) < size.x + radius && dist(position.y+radius,0,box.y,0) < size.y + radius && dist(position.z,0,box.z,0) < size.z + radius) {
+      //Collision below platform (usar plataforma de rebote)
+      if (dist(0,position.y,0,0, box.y - size.y,0) > radius*2) {
+        
+        //position.y = box.y + radius*2 + size.y;
+        //Deteccion por ancho o por largo
+        if(dist(position.z+radius/2,0,box.z,0) < size.z + radius){
+          player.addForce(new PVector(0, 0, -velocity.z*3));
+        }
+        if((dist(position.x+radius/2,0,box.x,0) < size.x + radius)){
+          player.addForce(new PVector(-velocity.x*3, 0, 0));
+        }
+        
+        player.addForce(new PVector(0, -velocity.y, 0));
       } else {
         position.y = box.y - radius*2 - size.y;
+        //bouncingplatform
+        grounded = true;
       }
-      switch(plat.getID()) {
-        case 1:
-          fill(0);
-          pushMatrix();
-          translate(box.x, box.y-radius*2-size.y, position.z-(position.z-box.z)/4);
-          sphere(120);
-          position.z -= (position.z-box.z*(box.z/position.z))/30f;
-          fill(255);
-          popMatrix();
-        case 3:
-          velocity.x += velocity.x*0.04f;
-          velocity.z += velocity.z*0.04f;
-          break;
-        case 6:
-          player.addForce(new PVector(0, -jumpForce*3, 0));
-          break;
-        case 7:
-          acceleration.x = velocity.x;
-          acceleration.z = velocity.z;
-          break;
-        case 11:
-          if (num == 3) {
-            position.x = box.x;
-            position.y = box.y - size.x;
-            position.z = box.z;
-          }
-          break;
+      if (grounded){
+        velocity.y = 0f;
       }
       plat.triggerDown();  
-
-      //bouncingplatform
-      velocity.y = 0f;
-      grounded = true;
+      plat.getEffect(this);
       nPlat = num;
     } else {
+      //nPlataforma == numero que esta pisando el jugador.
       if (num == nPlat) {
         grounded = false;
-      }
+      } 
     }
-    //Colision indirecta (deteccion por esta por encima de la plataforma
+    //Colision indirecta (above platform)
     if (position.y <= box.y - radius - size.y && position.x > box.x-size.x && position.x < box.x+size.x && position.z > box.z-size.z && position.z < box.z+size.z) {
       if (plat.getID() == 2) {
         if (position.y > box.y-1500) {
@@ -139,8 +124,9 @@ class Player {
         }
       }
     }
+   
   }
-
+  
   void controlling() {
     Control [] controls = controllerManager.getActions();
     controlForce = new PVector(0, 0, 0);
@@ -202,7 +188,6 @@ class Player {
     // shader(material);
     sphere(diameter); // This could be a 3D model
     fill(255);
-    
     popMatrix();
     fill(0);
     pushMatrix();

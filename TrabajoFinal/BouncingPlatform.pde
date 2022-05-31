@@ -1,8 +1,8 @@
 class BouncingPlatform extends Platform{
   boolean isDown;
 
-  BouncingPlatform(float x, float y, float z, float w, float h, float d, float xRotation, float yRotation, float zRotation, PVector _size){
-     super(x,y,z,w,h,d,xRotation,yRotation,zRotation,_size);
+  BouncingPlatform(float x, float y, float z, float xRotation, float yRotation, float zRotation, PVector _size){
+     super(x,y,z,xRotation,yRotation,zRotation,_size);
      isDown = false;
   }
   int getID(){
@@ -18,12 +18,12 @@ class BouncingPlatform extends Platform{
     
     pushMatrix();
     translate(position.x, position.y, position.z);
-    scale(scale.x, scale.y, scale.z);
+    scale(size.x/200,size.y/200,size.z/200);
     rotateX(rotation.x);
     rotateY(rotation.y);
     rotateZ(rotation.z);
     // shader(material);
-    box(size.x,size.y,size.z);
+    box(200);
     popMatrix();
     pushMatrix();
     popMatrix();

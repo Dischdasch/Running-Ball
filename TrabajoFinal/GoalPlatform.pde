@@ -1,7 +1,7 @@
 class GoalPlatform extends Platform{
   boolean isDown;
-  GoalPlatform(float x, float y, float z, float w, float h, float d, float xRotation, float yRotation, float zRotation, PVector _size){
-     super(x,y,z,w,h,d,xRotation,yRotation,zRotation,_size);
+  GoalPlatform(float x, float y, float z, float xRotation, float yRotation, float zRotation, PVector _size){
+     super(x,y,z,xRotation,yRotation,zRotation,_size);
      isDown = false;
   }
   int getID(){
@@ -10,23 +10,30 @@ class GoalPlatform extends Platform{
   void triggerDown(){
     isDown = true;
   }
+  boolean isDown(){
+    return isDown;    
+  }
   @Override
    void display() {
     fill(0,0,0);
     noStroke();
     pushMatrix();
     translate(position.x, position.y, position.z);
-    scale(scale.x, scale.y, scale.z);
+    scale(size.x/200,size.y/200,size.z/200);
     rotateX(rotation.x);
     rotateY(rotation.y);
     rotateZ(rotation.z);
     // shader(material);
-    box(size.x,size.y,size.z);
+    box(200);
+    popMatrix();
+    
+    pushMatrix();
+    translate(position.x, position.y, position.z);
     translate(0,-size.y/2-100,0);
     if(isDown){
       pushMatrix();
-      scale(1/scale.x, 1/scale.y, 1/scale.z);
       translate(100,-350,-400);
+      
       rotateY(radians(-90));
       fill(0);
       textSize(100);
@@ -37,9 +44,9 @@ class GoalPlatform extends Platform{
     } else{
       fill(255,0,0);
     }
+    scale(size.y/2,size.y/3,size.z/6);
     
     rotateX(PI);
-    scale(100/scale.x, 100/scale.y, 100/scale.z);
     translate(0, -1, 0);
     flagMaterial.material.set("u_time", millis()/100f);
     flagMaterial.material.set("windScale", 0.1);

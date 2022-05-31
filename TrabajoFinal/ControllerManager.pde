@@ -1,6 +1,6 @@
 import java.util.Map;
 
-public enum Control { JUMP, FORWARD, BACK, LEFT, RIGHT,
+public enum Control { JUMP, FORWARD, BACK, LEFT, RIGHT, CONTINUE,
          CAMERA_LEFT, CAMERA_RIGHT, CAMERA_UP, CAMERA_DOWN };
 
 public class ControllerManager {
@@ -12,10 +12,11 @@ public class ControllerManager {
     addMappings();
   }
   private void addMappings(){
-    mappings.put('w', Control.FORWARD);
-    mappings.put('s', Control.BACK);
-    mappings.put('a', Control.LEFT);
-    mappings.put('d', Control.RIGHT);
+    mappings.put('x', Control.CONTINUE); mappings.put('X', Control.CONTINUE);
+    mappings.put('W', Control.FORWARD);  mappings.put('w', Control.FORWARD);
+    mappings.put('S', Control.BACK); mappings.put('s', Control.BACK);
+    mappings.put('A', Control.LEFT); mappings.put('a', Control.LEFT);
+    mappings.put('D', Control.RIGHT); mappings.put('d', Control.RIGHT);
     mappings.put(' ', Control.JUMP);
   }
   public void keyPressed(Character key){

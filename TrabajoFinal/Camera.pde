@@ -24,9 +24,9 @@ class Camera {
     if (distance < minDistance) distance = minDistance;
     if (distance > maxDistance) distance = maxDistance;
   }
-  
+
   void reset(PVector target) {
     this.target = target;
   }
-
+  
 }
