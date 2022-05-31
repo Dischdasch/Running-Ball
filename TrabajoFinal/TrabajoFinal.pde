@@ -73,7 +73,7 @@ void setup() {
   iceMaterial = new Material(standardShader, 0.5f, 1.0, 1.0, backgroundColor, one, one, one, iceTexture, 1.0, iceHeight, 1.0);
 
   finishGoal = loadImage("UI/FinishGoal.png");
-  finishGoal.resize(300, 100);
+  finishGoal.resize(512, 150);
   coinIcon = loadImage("UI/CoinIcon.png");
   coinIcon.resize(50, 50);
 

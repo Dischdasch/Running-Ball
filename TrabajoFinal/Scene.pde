@@ -77,7 +77,9 @@ class Scene {
     stroke(255);
     fill(255);
     noLights();
-    image(finishGoal, width/2-150, height/2-50);
+    imageMode(CENTER);
+    image(finishGoal, width/2, height/2);
+    imageMode(CORNER);
     fill(0);
     textSize(15);
     text("Level " + name + " completed", width/2-130, height/2);
