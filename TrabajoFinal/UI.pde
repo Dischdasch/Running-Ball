@@ -38,12 +38,8 @@ class SelectScreen {
   SelectScreen() {
 
     //Instaciate Level Buttons
-    level1Button = new LevelButton(width/2 - 2*buttonSize - 45, height/2 - 100, buttonSize, color(0), color(50), true, "1", level1);
-    level2Button = new LevelButton(width/2 - buttonSize - 15, height/2 - 50, buttonSize, color(0), color(50), false, "2", level2);
-    level3Button = new LevelButton(width/2 +15, height/2, buttonSize, color(0), color(50), false, "3", level3);
-    level4Button = new LevelButton(width/2 + buttonSize + 45, height/2 +50, buttonSize, color(0), color(50), false, "4", level4);
-
-    buttons = new LevelButton[]{level1Button, level2Button, level3Button, level4Button};
+    
+    loadButtons();
 
     currentColor = baseColor;
 
@@ -56,6 +52,15 @@ class SelectScreen {
     background = loadImage("background.jpg");
 
     r = musicButtonSize/2;
+  }
+  
+  void loadButtons() {
+    level1Button = new LevelButton(width/2 - 2*buttonSize - 45, height/2 - 100, buttonSize, color(0), color(50), true, "1", level1);
+    level2Button = new LevelButton(width/2 - buttonSize - 15, height/2 - 50, buttonSize, color(0), color(50), false, "2", level2);
+    level3Button = new LevelButton(width/2 +15, height/2, buttonSize, color(0), color(50), false, "3", level3);
+    level4Button = new LevelButton(width/2 + buttonSize + 45, height/2 +50, buttonSize, color(0), color(50), false, "4", level4);
+    
+    buttons = new LevelButton[]{level1Button, level2Button, level3Button, level4Button};
   }
 
   void screenDraw() {

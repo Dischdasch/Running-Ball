@@ -18,8 +18,6 @@ PImage coinIcon;
 Material coinMaterial, flagMaterial, platformMaterial, metalMaterial, iceMaterial;
 float speed = 1.0;
 int collectableCount = 0;
-//Fin escena
-boolean fin;
 Scene level1, level2, level3, level4, currentScene;
 
 float fogIntensity = 100;
@@ -90,6 +88,7 @@ void setup() {
   //deadui
   deadButton = new CircleButton(width/2, height/2, 50, color(200), color(255));
   fluid = new Fluid(fluidHeight, true);
+  
   selectUI = new SelectScreen();
 }
 
@@ -102,8 +101,10 @@ void draw() {
 }
 
 void returnToMenu() {
-  selectUI.shown = true;
   loadLevels();
+  selectUI.loadButtons();
+  selectUI.shown = true;
+  music.rate(1.0);
 }
 
 //ya sea por reinicio o por finalizar, se reinicia
