@@ -36,4 +36,20 @@ class Material {
     material.set("fogIntensity", fogIntensity);
     shader(material);
   }
+  
+  void setMaterial(PVector col) {
+    material.set("ambientIntensity", ambientIntensity);
+    material.set("diffuseIntensity", diffuseIntensity);
+    material.set("specularIntensity", specularIntensity);
+    material.set("fogColor", fogColor);
+    material.set("ambientColor", ambientColor.x, ambientColor.y, ambientColor.z);
+    material.set("diffuseColor", col.x, col.y, col.z);
+    material.set("specularColor", specularColor.x, specularColor.y, specularColor.z);
+    material.set("texMap", albedo);
+    material.set("scale", scale);
+    material.set("bumpMap", bumpMap);
+    material.set("bumpScale", bumpScale);
+    material.set("fogIntensity", fogIntensity);
+    shader(material);
+  }
 }

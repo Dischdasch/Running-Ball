@@ -13,9 +13,10 @@ SoundFile collectableSound, jumpSound, bounceSound, landSound, fanfareSound, spl
 PShape coinModel, flagModel, blockModel, windPlatformModel;
 PShader standardShader, flagShader;
 PImage coinTexture, coinHeight, whiteTexture, grayTexture, flagTexture, 
-  platformTexture, iceTexture, iceHeight, stoneTexture, stoneHeight, finishGoal;
+  platformTexture, iceTexture, iceHeight, stoneTexture, stoneHeight, bouncyTexture,
+  finishGoal;
 PImage coinIcon;
-Material coinMaterial, flagMaterial, platformMaterial, metalMaterial, iceMaterial;
+Material coinMaterial, flagMaterial, platformMaterial, metalMaterial, iceMaterial, bouncyMaterial, breakableMaterial;
 float speed = 1.0;
 int collectableCount = 0;
 Scene level1, level2, level3, level4, currentScene;
@@ -63,12 +64,15 @@ void setup() {
   iceTexture = loadImage("Textures/IceTexture.jpg");
   iceHeight = loadImage("Textures/IceHeight.png");
   stoneTexture = loadImage("Textures/StoneTexture.jpg");
+  bouncyTexture = loadImage("Textures/BouncyTexture.jpg");
   stoneHeight = loadImage("Textures/StoneHeight.png");
   coinMaterial = new Material(standardShader, 0.5f, 1.0, 1.0, backgroundColor, one, one, one, coinTexture, 1.0, coinHeight, 1.0);
   flagMaterial = new Material(flagShader, 0.5f, 1.0, 0.0, backgroundColor, one, one, one, flagTexture, 1.0, grayTexture, 1.0);
   platformMaterial = new Material(standardShader, 0.5f, 1.0, 0.0, backgroundColor, one, one, one, stoneTexture, 1.0, stoneHeight, 1.0);
   metalMaterial = new Material(standardShader, 0.5f, 1.0, 1.0, backgroundColor, one, one, one, grayTexture, 1.0, whiteTexture, 1.0);
   iceMaterial = new Material(standardShader, 0.5f, 1.0, 1.0, backgroundColor, one, one, one, iceTexture, 1.0, iceHeight, 1.0);
+  bouncyMaterial = new Material(standardShader, 0.5f, 1.0, 0.0, backgroundColor, one, one, one, bouncyTexture, 1.0, grayTexture, 1.0);
+  breakableMaterial = new Material(standardShader, 0.5f, 1.0, 0.0, backgroundColor, one, new PVector(0f, 1f, 0f), one, whiteTexture, 1.0, grayTexture, 1.0);
 
   finishGoal = loadImage("UI/FinishGoal.png");
   finishGoal.resize(720, 150);
