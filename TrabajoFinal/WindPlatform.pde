@@ -23,6 +23,6 @@ class WindPlatform extends Platform{
   }
   @Override
   void update(){
-    rotation.y += 1;
+    rotation.y += 0.2;
   }
 }

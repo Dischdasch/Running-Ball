@@ -31,20 +31,6 @@ class GoalPlatform extends Platform{
     pushMatrix();
     translate(position.x, position.y, position.z);
     translate(0,-size.y/2-100,0);
-    if(isDown){
-      pushMatrix();
-      translate(100,-350,-400);
-      
-      rotateY(radians(-90));
-      fill(0);
-      textSize(100);
-      text("Meta",10,10);
-      fill(255);
-      popMatrix();
-      fill(0,255,0);
-    } else{
-      fill(255,0,0);
-    }
     scale(size.y/2,size.y/3,size.z/6);
     
     rotateX(PI);
