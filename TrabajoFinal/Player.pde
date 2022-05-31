@@ -100,6 +100,7 @@ class Player {
       } else {
         position.y = box.y - radius*2 - size.y;
         //bouncingplatform
+        if (!grounded) landSound.play();
         grounded = true;
       }
       if (grounded) {
@@ -168,12 +169,15 @@ class Player {
   void jump() {
     if (grounded) {
       player.addForce(new PVector(0, -jumpForce, 0));
+      jumpSound.play();
     }
   }
 
   void checkDeath() {
     if (player.position.y >= fluidHeight) {
       dead = true;
+      splashSound.play();
+      music.pause();
     } else {
       dead = false;
     }

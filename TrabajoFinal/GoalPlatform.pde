@@ -20,11 +20,12 @@ class GoalPlatform extends Platform{
     pushMatrix();
     translate(position.x, position.y, position.z);
     scale(size.x/200,size.y/200,size.z/200);
-    rotateX(rotation.x);
+    rotateX(PI + rotation.x);
     rotateY(rotation.y);
     rotateZ(rotation.z);
-    // shader(material);
-    box(200);
+    platformMaterial.setMaterial();
+    shape(blockModel);
+    resetShader();
     popMatrix();
     
     pushMatrix();

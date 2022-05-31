@@ -9,7 +9,7 @@ ArrayList<Collectable> collectables = new ArrayList<Collectable>();
 ArrayList<Collectable> toBeRemoved = new ArrayList<Collectable>();
 SelectScreen selectUI;
 SoundFile music;
-SoundFile collectableSound;
+SoundFile collectableSound, jumpSound, bounceSound, landSound, fanfareSound, splashSound;
 PShape coinModel, flagModel, blockModel, windPlatformModel;
 PShader standardShader, flagShader;
 PImage coinTexture, coinHeight, whiteTexture, grayTexture, flagTexture, 
@@ -71,12 +71,18 @@ void setup() {
   iceMaterial = new Material(standardShader, 0.5f, 1.0, 1.0, backgroundColor, one, one, one, iceTexture, 1.0, iceHeight, 1.0);
 
   finishGoal = loadImage("UI/FinishGoal.png");
-  finishGoal.resize(512, 150);
+  finishGoal.resize(720, 150);
   coinIcon = loadImage("UI/CoinIcon.png");
   coinIcon.resize(50, 50);
 
   collectableSound = new SoundFile(this, "Audio/collect.wav");
+  bounceSound = new SoundFile(this, "Audio/boing.wav");
+  jumpSound = new SoundFile(this, "Audio/jump.wav");
+  landSound = new SoundFile(this, "Audio/land.wav");
+  fanfareSound = new SoundFile(this, "Audio/fanfare.wav");
+  splashSound = new SoundFile(this, "Audio/splash.wav");
   music = new SoundFile(this, "Audio/music2.mp3");
+  music.amp(0.5);
   music.loop();
 
   player = new Player(width/2, height/2, 0);
@@ -137,7 +143,7 @@ void mouseReleased()
 }
 
 void playMusic(float speed) {
-  musicVelocity = lerp(musicVelocity, map(speed, 0.0, player.maxSpeed, 0.75, 1.25), 0.1);
+  musicVelocity = lerp(musicVelocity, map(speed, 0.0, player.maxSpeed, 0.75, 1.25), 0.9);
   if (musicVelocity > 1.25) {
     musicVelocity = 1.25;
   } 

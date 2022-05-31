@@ -58,6 +58,7 @@ class Platform {
           break;
         case 6:
           player.addForce(new PVector(0, -p.jumpForce*3, 0));
+          bounceSound.play();
           break;
         case 7:
           p.acceleration.x = p.velocity.x;

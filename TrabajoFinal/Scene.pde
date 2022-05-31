@@ -17,6 +17,7 @@ class Scene {
     player.position.x = width/2;
     player.position.y = height/2+100;
     player.position.z = 0;
+    music.loop();
   }
 
   void update() {
@@ -26,14 +27,16 @@ class Scene {
     background(backgroundColor.x*255, backgroundColor.y*255, backgroundColor.z*255);
     directionalLight(255, 255, 255, -1, 1, -1);
 
-
     for (Platform platform : platforms) {
       platform.display();
       platform.update();
       if (platform.isDown() && platform.getID() == 5 && finished == false) {
+        music.pause();
         finished = true;
+        fanfareSound.play();
       }
     }
+
     playMusic(player.velocity.mag());
     handleCollectables();
     fluid.update();
@@ -46,7 +49,7 @@ class Scene {
       player.checkDeath();
     }
     popMatrix();
-    
+
     hint(DISABLE_DEPTH_TEST);
     coinUI();
     if (dead) dieUI();
@@ -54,7 +57,7 @@ class Scene {
       goalUI();
     }
     hint(ENABLE_DEPTH_TEST);
-    
+
     if (key == ' ' && finished) {
       next();
     }
