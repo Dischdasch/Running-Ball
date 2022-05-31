@@ -4,8 +4,8 @@ class Fluid {
     
     private final String textureMap = "data/Shaders/Water_002_SD/Water_002_COLOR.jpg";
     private final String bumpMap = "data/Shaders/Water_002_SD/Water_002_ROUGH.jpg";
-    private final String fragmentShaderPath = "./data/Shaders/StandardFrag.glsl";
-    private final String vertexShaderPath = "./data/Shaders/WaterVert.glsl";
+    private final String fragmentShaderPath = "./data/Shaders/WaterFrag.glsl";
+    private final String vertexShaderPath = "./data/Shaders/StandardVert.glsl";
     PShader shader;
 
     public Fluid(float height, boolean isWater){
@@ -23,14 +23,16 @@ class Fluid {
         shader.set("scale", 10.0);
         shader.set("fogIntensity", 100.0);
         
+        
         fluidHeight = height;
     }
 
     public void update(){
         pushMatrix();
         shader.set("u_time", millis()/1000f);
+        shader.set("fluidSpeed", 1.0);
         shader(shader);
-        translate(0, fluidHeight, 0);
+        translate(-50000, fluidHeight, -50000);
         rotateX(HALF_PI);
         scale(100000,100000,100000);
         quad(0,0,0,1,1,1,1,0);

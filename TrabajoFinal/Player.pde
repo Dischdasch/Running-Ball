@@ -4,6 +4,7 @@ class Player {
   float xAngle, zAngle, xAngleVelocity, zAngleVelocity;
   float dragIntensity = 1f;
   boolean grounded = false;
+  float cameraAngle;
 
   // Geometry
   float radius = 50;
@@ -149,6 +150,7 @@ class Player {
     }
 
     controlForce.setMag(movementForce);
+    if (abs(cam.angle - cameraAngle) > 0.01) controlForce = MatrixOperations.yRotate(controlForce, cam.angle - cameraAngle);
     player.addForce(controlForce);
   }
 

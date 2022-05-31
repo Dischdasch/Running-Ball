@@ -54,16 +54,8 @@ float snoise(vec2 v){
 }
 
 void main() {
-<<<<<<< HEAD
-  //Vértice en coordenadas transformadas
-  vec4 worldPos = transformMatrix * position;
-  worldPos.x += snoise((worldPos.xz + u_time)) * position.z;
-  worldPos.z += snoise((worldPos.xz + u_time + 100.0)) * position.z;
-  gl_Position = worldPos;
-=======
   //Vértice en coordenadas transformadas 
   gl_Position = transformMatrix * position;
->>>>>>> ade62a6a37e95524c6b844156e6603127f5f1ff7
   
   //Coordenada de textura
   vertTexCoord = texMatrix * vec4(texCoord, 1.0, 1.0);

@@ -73,7 +73,7 @@ void setup() {
   music.loop();
   
   player = new Player(width/2, height/2, 0);
-  cam = new Camera(player.position, 500, 50, 5000);
+  cam = new Camera(player.position, 750, 250, 2000);
   
   //tamaño
   PVector sizeL = new PVector(100,400,100);
@@ -176,7 +176,7 @@ void dieUI(){
     text("press any key to retry", width/2, height/2 + 32);
     if(controllerManager.getActions().length > 0){
       player = new Player(width/2, height/2, 0);
-      cam = new Camera(player.position, 500, 50, 5000);
+      cam.reset(player.position);
       dead = false;
     }
   }
@@ -196,6 +196,11 @@ void mouseReleased()
     music.pause();
     selectUI.changeMusic = false;
   }
+}
+
+void mouseWheel(MouseEvent event) {
+  float amount = event.getCount();
+  cam.zoom(amount);
 }
 
 void playMusic(float speed) {
