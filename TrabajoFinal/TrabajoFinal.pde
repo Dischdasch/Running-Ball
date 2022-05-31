@@ -10,11 +10,12 @@ ArrayList<Collectable> toBeRemoved = new ArrayList<Collectable>();
 SelectScreen selectUI;
 SoundFile music;
 SoundFile collectableSound;
-PShape coinModel, flagModel;
+PShape coinModel, flagModel, blockModel, windPlatformModel;
 PShader standardShader, flagShader;
-PImage coinTexture, coinHeight, whiteTexture, grayTexture, flagTexture;
+PImage coinTexture, coinHeight, whiteTexture, grayTexture, flagTexture, 
+  platformTexture, iceTexture, iceHeight, stoneTexture, stoneHeight;
 PImage coinIcon;
-Material coinMaterial, flagMaterial;
+Material coinMaterial, flagMaterial, platformMaterial, metalMaterial, iceMaterial;
 float speed = 1.0;
 int collectableCount = 0;
 float fogIntensity = 100;
@@ -33,17 +34,19 @@ int fluidHeight = 2000;
 void setup() {
   size(1280, 720, P3D);
   
+  ((PGraphics3D)g).textureWrap(Texture.REPEAT); // Textures repeat when scaled down
+  
   selectUI = new SelectScreen();
   backgroundColor = new PVector(35f/255f, 161f/255f, 235f/255f);
   letterFont = createFont("Fonts/SportypoRegular.ttf", 128);
   numberFont = createFont("Fonts/Chopsic.otf", 128);
   textFont(letterFont);
   
-  player = new Player(width/2, height/2, 0);
-  cam = new Camera(player.position, 500, 50, 5000);
-  
+  // Shaders, textures, models and materials
   coinModel = loadShape("Models/coin.obj");
   flagModel = loadShape("Models/flag.obj");
+  blockModel = loadShape("Models/SplitBlock.obj");
+  windPlatformModel = loadShape("Models/WindPlatform.obj");
   standardShader = loadShader("Shaders/StandardFrag.glsl", "Shaders/StandardVert.glsl");
   flagShader = loadShader("Shaders/StandardFrag.glsl", "Shaders/WindVert.glsl");
   coinTexture = loadImage("Textures/CoinTexture.jpg");
@@ -51,8 +54,16 @@ void setup() {
   whiteTexture = loadImage("Textures/white.jpg");
   grayTexture = loadImage("Textures/Gray.jpg");
   flagTexture = loadImage("Textures/FlagTexture.jpg");
-  coinMaterial = new Material(standardShader, 0f, 1.0, 1.0, backgroundColor, one, one, coinTexture, 1.0, coinHeight, 1.0);
-  flagMaterial = new Material(flagShader, 0f, 1.0, 0.0, backgroundColor, one, one, flagTexture, 1.0, grayTexture, 1.0);
+  platformTexture = loadImage("Textures/PlatformTexture.jpg");
+  iceTexture = loadImage("Textures/IceTexture.jpg");
+  iceHeight = loadImage("Textures/IceHeight.png");
+  stoneTexture = loadImage("Textures/PlatformTexture.jpg");
+  stoneHeight = loadImage("Textures/StoneHeight.png");
+  coinMaterial = new Material(standardShader, 0.5f, 1.0, 1.0, backgroundColor, one, one, one, coinTexture, 1.0, coinHeight, 1.0);
+  flagMaterial = new Material(flagShader, 0.5f, 1.0, 0.0, backgroundColor, one, one, one, flagTexture, 1.0, grayTexture, 1.0);
+  platformMaterial = new Material(standardShader, 0.5f, 1.0, 0.0, backgroundColor, one, one, one, stoneHeight, 1.0, stoneHeight, 1.0);
+  metalMaterial = new Material(standardShader, 0.5f, 1.0, 1.0, backgroundColor, one, one, one, grayTexture, 1.0, whiteTexture, 1.0);
+  iceMaterial = new Material(standardShader, 0.5f, 1.0, 1.0, backgroundColor, one, one, one, iceTexture, 1.0, iceHeight, 1.0);
   
   coinIcon = loadImage("UI/CoinIcon.png");
   coinIcon.resize(50,50);
@@ -60,6 +71,9 @@ void setup() {
   collectableSound = new SoundFile(this, "Audio/collect.wav");
   music = new SoundFile(this, "Audio/music2.mp3");
   music.loop();
+  
+  player = new Player(width/2, height/2, 0);
+  cam = new Camera(player.position, 500, 50, 5000);
   
   //tamaño
   PVector sizeL = new PVector(100,400,100);
@@ -103,15 +117,9 @@ void draw() {
     cam.update();
     
     background(backgroundColor.x*255, backgroundColor.y*255, backgroundColor.z*255);
-    directionalLight(255,255,255,1,1,-1);
+    directionalLight(255,255,255, -1, 1, -1);
     
-    if(!dead){
-      player.controlling();
-      player.addForce(gravity);
-      player.update();
-      player.display();
-      player.updateCollision(plat);
-    }
+
     for (Platform platform : plat) {
       platform.display();
       platform.update();
@@ -120,6 +128,13 @@ void draw() {
     handleCollectables();
     checkDeath();
     fluid.update();
+    if(!dead){
+      player.controlling();
+      player.addForce(gravity);
+      player.update();
+      player.display();
+      player.updateCollision(plat);
+    }
     popMatrix();
     drawUI();
   }
@@ -157,6 +172,13 @@ void coinUI(){
 void dieUI(){
   if(dead){
     text("dead", width/2, height/2);
+    textSize(16);
+    text("press any key to retry", width/2, height/2 + 32);
+    if(controllerManager.getActions().length > 0){
+      player = new Player(width/2, height/2, 0);
+      cam = new Camera(player.position, 500, 50, 5000);
+      dead = false;
+    }
   }
 }
 
