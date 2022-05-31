@@ -22,6 +22,7 @@ class Fluid {
         shader.set("fogColor", backgroundColor.x, backgroundColor.y, backgroundColor.z);
         shader.set("scale", 10.0);
         shader.set("fogIntensity", 100.0);
+        shader.set("fluidSpeed", 0.1);
         
         fluidHeight = height;
     }

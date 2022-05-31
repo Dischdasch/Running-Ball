@@ -6,7 +6,7 @@ class Player {
   boolean grounded = false;
   float cameraAngle;
   int numcollisions = 0;
-  
+
   // Geometry
   float radius = 50;
   float diameter = 2*radius;
@@ -21,10 +21,10 @@ class Player {
   PImage texture, heightMap;
   PShape model;
   Material material;
-  
+
   // Standing platform
   int nPlat;
-  
+
   Player(float x, float y, float z) {
     this.position = new PVector(x, y, z);
     this.velocity = new PVector(0, 0, 0);
@@ -48,7 +48,7 @@ class Player {
     }
     xAngle += xAngleVelocity;
     zAngle += zAngleVelocity;
-    
+
     PVector horizontalVelocity = velocity.copy();
     horizontalVelocity.y = 0f;
     horizontalVelocity.limit(maxSpeed);
@@ -67,8 +67,8 @@ class Player {
     }
   }
 
-  void updateCollision(Platform b){
-    collisionBoxDetection(b,11);
+  void updateCollision(Platform b) {
+    collisionBoxDetection(b, 11);
   }
 
   void addForce(PVector force) {
@@ -77,32 +77,32 @@ class Player {
 
   //colision box 2
   /* box = platform initial position
-       size = platform size
-  */
+   size = platform size
+   */
   void collisionBoxDetection(Platform plat, int num) {
     PVector box = plat.getXYZ();
     PVector size = plat.getSize();
     //Colision directa
-    if (dist(position.x,0,box.x,0) < size.x + radius && dist(position.y+radius,0,box.y,0) < size.y + radius && dist(position.z,0,box.z,0) < size.z + radius) {
+    if (dist(position.x, 0, box.x, 0) < size.x + radius && dist(position.y+radius, 0, box.y, 0) < size.y + radius && dist(position.z, 0, box.z, 0) < size.z + radius) {
       //Collision below platform (usar plataforma de rebote)
-      if (dist(0,position.y,0,0, box.y - size.y,0) > radius*2) {
-        
+      if (dist(0, position.y, 0, 0, box.y - size.y, 0) > radius*2) {
+
         //position.y = box.y + radius*2 + size.y;
         //Deteccion por ancho o por largo
-        if(dist(position.z+radius/2,0,box.z,0) < size.z + radius){
+        if (dist(position.z+radius/2, 0, box.z, 0) < size.z + radius) {
           player.addForce(new PVector(0, 0, -velocity.z*3));
         }
-        if((dist(position.x+radius/2,0,box.x,0) < size.x + radius)){
+        if ((dist(position.x+radius/2, 0, box.x, 0) < size.x + radius)) {
           player.addForce(new PVector(-velocity.x*3, 0, 0));
         }
-        
+
         player.addForce(new PVector(0, -velocity.y, 0));
       } else {
         position.y = box.y - radius*2 - size.y;
         //bouncingplatform
         grounded = true;
       }
-      if (grounded){
+      if (grounded) {
         velocity.y = 0f;
       }
       plat.triggerDown();  
@@ -112,7 +112,7 @@ class Player {
       //nPlataforma == numero que esta pisando el jugador.
       if (num == nPlat) {
         grounded = false;
-      } 
+      }
     }
     //Colision indirecta (above platform)
     if (position.y <= box.y - radius - size.y && position.x > box.x-size.x && position.x < box.x+size.x && position.z > box.z-size.z && position.z < box.z+size.z) {
@@ -124,9 +124,8 @@ class Player {
         }
       }
     }
-   
   }
-  
+
   void controlling() {
     Control [] controls = controllerManager.getActions();
     controlForce = new PVector(0, 0, 0);
@@ -158,7 +157,7 @@ class Player {
       break;
     }
   }
-  
+
   // Necesitamos un evento para cuando una tecla se pusa una sola vez, como en el salto, y no continuamente
   void onKeyPressedOnce() {
     if (key == ' ') {
@@ -169,6 +168,14 @@ class Player {
   void jump() {
     if (grounded) {
       player.addForce(new PVector(0, -jumpForce, 0));
+    }
+  }
+
+  void checkDeath() {
+    if (player.position.y >= fluidHeight) {
+      dead = true;
+    } else {
+      dead = false;
     }
   }
 
@@ -184,7 +191,7 @@ class Player {
     shape(model);
     resetShader();
     popMatrix();
-    fill(255,255,255,50);
+    fill(255, 255, 255, 50);
     // shader(material);
     sphere(diameter); // This could be a 3D model
     fill(255);

@@ -1,70 +1,124 @@
-class Scene  {
-  Player pl;
+class Scene {
   ArrayList<Platform> platforms;
   ArrayList<Collectable> collectablesScene;
   ArrayList<Collectable> toBeRemoved = new ArrayList<Collectable>();
-  boolean prefin; //llega a la meta, pero no se va
-  boolean fin; //cambio de escena
-  int nivel;
-  Scene(Player p, ArrayList<Platform> level, ArrayList<Collectable> collectable){
-    pl = p;
+  boolean finished;
+  Scene nextScene;
+  String name;
+
+  Scene(ArrayList<Platform> level, ArrayList<Collectable> collectable, Scene nextScene, String name) {
     platforms = level;
     collectablesScene = collectable;
+    this.nextScene = nextScene;
+    this.name = name;
   }
-  boolean isFinished(){
-    return fin;  
+
+  void init() {
+    player.position.x = width/2;
+    player.position.y = height/2+100;
+    player.position.z = 0;
   }
-  int getNivel(){
-    return nivel;  
-  }
-  void init(){
-    pl.position.x = width/2;
-    pl.position.y = height/2+100;
-    pl.position.z = 0;
-  }
-  void update(){
+
+  void update() {
     pushMatrix();
     cam.update();
-    
+
     background(backgroundColor.x*255, backgroundColor.y*255, backgroundColor.z*255);
-    directionalLight(255,255,255, -1, 1, -1);
-    
-    
-    for (Platform platform :platforms) {
+    directionalLight(255, 255, 255, -1, 1, -1);
+
+
+    for (Platform platform : platforms) {
       platform.display();
       platform.update();
-      if(platform.isDown() && platform.getID() == 5 && prefin == false){
-       
-        prefin = true;
+      if (platform.isDown() && platform.getID() == 5 && finished == false) {
+        finished = true;
       }
     }
     playMusic(player.velocity.mag());
     handleCollectables();
     fluid.update();
-    if(!dead){
-      pl.controlling();
-      pl.addForce(gravity);
-      pl.update();
-    pl.display();
-    pl.updateCollision(platforms);
+    if (!dead) {
+      player.controlling();
+      player.addForce(gravity);
+      player.update();
+      player.display();
+      player.updateCollision(platforms);
+      player.checkDeath();
     }
     popMatrix();
-    drawUI(0);
-    if(prefin == true){
-      drawUI(1);
+    
+    hint(DISABLE_DEPTH_TEST);
+    coinUI();
+    if (dead) dieUI();
+    if (finished == true) {
+      goalUI();
     }
-    if(key == ' ' && prefin){
-      fin = true;
+    hint(ENABLE_DEPTH_TEST);
+    
+    if (key == ' ' && finished) {
+      next();
     }
   }
+
+  //coinui
+  void coinUI() {
+    stroke(255);
+    fill(255);
+    noLights();
+    image(coinIcon, width - 130, 15);
+    textFont(numberFont);
+    textSize(32);
+    text(collectableCount, width - 50, 50);
+    textFont(letterFont);
+  }
+
+  //goalUI
+  void goalUI() {
+    stroke(255);
+    fill(255);
+    noLights();
+    image(finishGoal, width/2-150, height/2-50);
+    fill(0);
+    textSize(15);
+    text("Level " + name + " completed", width/2-130, height/2);
+    textSize(10);
+    text("Press SPACE to continue", width/2-110, height/2+20);
+    fill(255);
+  }
+
+  //deadui
+  void dieUI() {
+    text("dead", width/2, height/2);
+    textSize(16);
+    text("press any key to retry", width/2, height/2 + 32);
+    if (controllerManager.getActions().length > 0) {
+      //Restart level and player position
+      loadLevels();
+      currentScene.init();
+
+      cam.reset(player.position);
+      dead = false;
+    }
+  }
+
   void handleCollectables() {
-  for (Collectable collectable : collectablesScene) {
-    collectable.display();
-    if (collectable.collidesWith(player)) toBeRemoved.add(collectable);
+    for (Collectable collectable : collectablesScene) {
+      collectable.display();
+      if (collectable.collidesWith(player)) toBeRemoved.add(collectable);
+    }
+
+    for (Collectable collectable : toBeRemoved) {
+      collectablesScene.remove(collectable);
+    }
+    toBeRemoved.clear();
   }
-  for (Collectable collectable : toBeRemoved) {
-    collectablesScene.remove(collectable);
-  }
-  toBeRemoved.clear();
+
+  void next() {
+    if (nextScene == null) {
+      returnToMenu();
+    } else {
+      nextScene.init();
+      currentScene = nextScene;
+    }
   }
 }

@@ -9,9 +9,11 @@ class LevelButton{
   boolean firstImage = true;
   PImage screenshot;
   int count = frameCount;
+  Scene level;
   
    
-  LevelButton(int posX, int posY, int size, color buttonColor, color buttonHighlight, boolean levelFree, String name){
+  LevelButton(int posX, int posY, int size, color buttonColor, color buttonHighlight, boolean levelFree, String name, Scene level){
+    this.level = level;
     rectX = posX;
     rectY = posY;
     rectSize = size;
