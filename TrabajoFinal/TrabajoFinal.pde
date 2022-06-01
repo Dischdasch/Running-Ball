@@ -96,7 +96,7 @@ void setup() {
   music.amp(0.5);
   music.loop();
 
-  player = new Player(width/2, height/2, 0);
+  player = new Player(640, 360, 0);
   cam = new Camera(player.position, 750, 250, 2000);
   controllerManager = new ControllerManager();
 
@@ -123,6 +123,7 @@ void returnToMenu() {
   selectUI.loadButtons();
   selectUI.shown = true;
   music.rate(1.0);
+  music.loop();
 }
 
 //ya sea por reinicio o por finalizar, se reinicia
@@ -171,8 +172,24 @@ void keyPressed() {
     selectUI.shown = true;
     loadLevels();
   }
+  if (key == ' ' && currentScene != null) {
+    onButtonPressed();
+  }
 }
 
 void keyReleased() {
   controllerManager.keyReleased(key);
+}
+
+public void onButtonPressed() {
+  if (dead) {
+    //Restart level and player position
+    loadLevels();
+    currentScene.init();
+  
+    cam.reset(player.position);
+    dead = false;
+  } else if (currentScene.finished) {
+    currentScene.next();
+  }
 }

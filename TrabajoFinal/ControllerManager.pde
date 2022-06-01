@@ -21,12 +21,13 @@ public class ControllerManager {
       leftStickY = device.getSlider("Eje Y");
       rightStickX = device.getSlider("Rotación X");
       rightStickY = device.getSlider("Rotación Y");
-      leftStickX.setTolerance(0.1);
-      leftStickY.setTolerance(0.1);
-      rightStickX.setTolerance(0.1);
-      rightStickY.setTolerance(0.1);
+      leftStickX.setTolerance(0.3);
+      leftStickY.setTolerance(0.3);
+      rightStickX.setTolerance(0.3);
+      rightStickY.setTolerance(0.3);
       jumpButton = device.getButton("Botón 0");
       jumpButton.plug(player, "jump", ControlIO.ON_PRESS);
+      jumpButton.plug("onButtonPressed", ControlIO.ON_PRESS);
     } 
     catch (RuntimeException exception) {
       println("Device not found");

@@ -1,6 +1,7 @@
 public class Player {
   // Physics
   PVector position, velocity, acceleration;
+  PVector horizontalVelocity;
   float xAngle, zAngle, xAngleVelocity, zAngleVelocity;
   float dragIntensity = 1f;
   boolean grounded = false;
@@ -29,6 +30,7 @@ public class Player {
     this.position = new PVector(x, y, z);
     this.velocity = new PVector(0, 0, 0);
     this.acceleration = new PVector(0, 0, 0);
+    horizontalVelocity = velocity.copy();
     model = loadShape("Models/Bunny.obj");
     texture = loadImage("Textures/BunnyTexture.png");
     heightMap = loadImage("Textures/BunnyHeight.png");
@@ -52,7 +54,7 @@ public class Player {
     xAngle += xAngleVelocity;
     zAngle += zAngleVelocity;
 
-    PVector horizontalVelocity = velocity.copy();
+    horizontalVelocity = velocity.copy();
     horizontalVelocity.y = 0f;
     horizontalVelocity.limit(maxSpeed);
     velocity = new PVector(horizontalVelocity.x, velocity.y, horizontalVelocity.z);
@@ -137,7 +139,6 @@ public class Player {
     for (Control control : controls) {
       processControl(control);
     }
-    //move();
   }
   
   private void move() {
