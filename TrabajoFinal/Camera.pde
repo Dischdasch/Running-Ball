@@ -15,6 +15,7 @@ class Camera {
   
   void update() {
     if (mousePressed) angle += (mouseX - pmouseX) * mouseSensitivity;
+    angle += controllerManager.getCameraMovement() * 0.1;
     position = new PVector(target.x - distance*cos(angle), target.y - 200 , target.z - distance*-sin(angle));
     camera(position.x, position.y, position.z, target.x, target.y, target.z, 0, 1, 0);
   }

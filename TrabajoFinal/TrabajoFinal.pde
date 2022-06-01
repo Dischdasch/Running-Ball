@@ -1,9 +1,13 @@
 import processing.sound.*;
+import org.gamecontrolplus.*;
+import net.java.games.input.*;
+
+ControlIO control;
 ArrayList<Platform> platforms;
 Player player;
 Camera cam;
 PVector gravity;
-ControllerManager controllerManager = new ControllerManager();
+ControllerManager controllerManager;
 ArrayList<Platform> plat  = new ArrayList<Platform>();
 ArrayList<Collectable> collectables = new ArrayList<Collectable>();
 ArrayList<Collectable> toBeRemoved = new ArrayList<Collectable>();
@@ -36,9 +40,12 @@ CircleButton deadButton;
 Fluid fluid;
 int fluidHeight = 2000;
 
+
+
 void setup() {
   size(1280, 720, P3D);
-
+  control = ControlIO.getInstance(this);
+  
   
   backgroundColor = new PVector(35f/255f, 161f/255f, 235f/255f);
   letterFont = createFont("Fonts/SportypoRegular.ttf", 128);
@@ -89,8 +96,9 @@ void setup() {
   music.amp(0.5);
   music.loop();
 
-  player = new Player(width/2, height/2, 0);
+  player = new Player(640, 360, 0);
   cam = new Camera(player.position, 750, 250, 2000);
+  controllerManager = new ControllerManager();
 
   loadLevels();
 
@@ -115,6 +123,7 @@ void returnToMenu() {
   selectUI.loadButtons();
   selectUI.shown = true;
   music.rate(1.0);
+  music.loop();
 }
 
 //ya sea por reinicio o por finalizar, se reinicia
@@ -163,8 +172,24 @@ void keyPressed() {
     selectUI.shown = true;
     loadLevels();
   }
+  if (key == ' ' && currentScene != null) {
+    onButtonPressed();
+  }
 }
 
 void keyReleased() {
   controllerManager.keyReleased(key);
+}
+
+public void onButtonPressed() {
+  if (dead) {
+    //Restart level and player position
+    loadLevels();
+    currentScene.init();
+  
+    cam.reset(player.position);
+    dead = false;
+  } else if (currentScene.finished) {
+    currentScene.next();
+  }
 }

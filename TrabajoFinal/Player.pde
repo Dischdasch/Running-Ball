@@ -1,6 +1,7 @@
-class Player {
+public class Player {
   // Physics
   PVector position, velocity, acceleration;
+  PVector horizontalVelocity;
   float xAngle, zAngle, xAngleVelocity, zAngleVelocity;
   float dragIntensity = 1f;
   boolean grounded = false;
@@ -29,6 +30,7 @@ class Player {
     this.position = new PVector(x, y, z);
     this.velocity = new PVector(0, 0, 0);
     this.acceleration = new PVector(0, 0, 0);
+    horizontalVelocity = velocity.copy();
     model = loadShape("Models/Bunny.obj");
     texture = loadImage("Textures/BunnyTexture.png");
     heightMap = loadImage("Textures/BunnyHeight.png");
@@ -36,6 +38,9 @@ class Player {
   }
 
   void update() {
+    controlForce.add(controllerManager.getMovement());
+    move();
+    
     PVector drag = velocity.copy();
     drag.y = 0;
     drag.mult(-1);
@@ -49,7 +54,7 @@ class Player {
     xAngle += xAngleVelocity;
     zAngle += zAngleVelocity;
 
-    PVector horizontalVelocity = velocity.copy();
+    horizontalVelocity = velocity.copy();
     horizontalVelocity.y = 0f;
     horizontalVelocity.limit(maxSpeed);
     velocity = new PVector(horizontalVelocity.x, velocity.y, horizontalVelocity.z);
@@ -134,7 +139,9 @@ class Player {
     for (Control control : controls) {
       processControl(control);
     }
-
+  }
+  
+  private void move() {
     controlForce.setMag(movementForce);
     if (abs(cam.angle - cameraAngle) > 0.01) controlForce = MatrixOperations.yRotate(controlForce, cam.angle - cameraAngle);
     player.addForce(controlForce);
@@ -166,7 +173,7 @@ class Player {
     }
   }
 
-  void jump() {
+  public void jump() {
     if (grounded) {
       player.addForce(new PVector(0, -jumpForce, 0));
       jumpSound.play();

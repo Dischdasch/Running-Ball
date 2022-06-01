@@ -1,4 +1,4 @@
-class Scene {
+public class Scene {
   ArrayList<Platform> platforms;
   ArrayList<Collectable> collectablesScene;
   ArrayList<Collectable> toBeRemoved = new ArrayList<Collectable>();
@@ -14,8 +14,8 @@ class Scene {
   }
 
   void init() {
-    player.position.x = width/2;
-    player.position.y = height/2+100;
+    player.position.x = 640;
+    player.position.y = 420;
     player.position.z = 0;
     music.loop();
   }
@@ -23,6 +23,7 @@ class Scene {
   void update() {
     pushMatrix();
     cam.update();
+    cam.zoom(controllerManager.getCameraZoom());
 
     background(backgroundColor.x*255, backgroundColor.y*255, backgroundColor.z*255);
     directionalLight(255, 255, 255, -1, 1, -1);
@@ -37,7 +38,7 @@ class Scene {
       }
     }
 
-    playMusic(player.velocity.mag());
+    playMusic(player.horizontalVelocity.mag());
     handleCollectables();
     fluid.update();
     if (!dead) {
@@ -57,10 +58,6 @@ class Scene {
       goalUI();
     }
     hint(ENABLE_DEPTH_TEST);
-
-    if (key == ' ' && finished) {
-      next();
-    }
   }
 
   //coinui
@@ -97,12 +94,7 @@ class Scene {
     textSize(16);
     text("press any key to retry", width/2, height/2 + 32);
     if (controllerManager.getActions().length > 0) {
-      //Restart level and player position
-      loadLevels();
-      currentScene.init();
-
-      cam.reset(player.position);
-      dead = false;
+      onButtonPressed();
     }
   }
 
