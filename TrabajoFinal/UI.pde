@@ -17,23 +17,25 @@ class SelectScreen {
   //Sound and Music Buttons
   int soundButtonX = 50;
   int soundButtonY = 660;
-  int musicButtonX = 135;
+  int musicButtonX = 120;
   int musicButtonY = 660;
-  int musicButtonSize = 70;
+  int musicButtonSize = 50;
   int r;
   boolean music = true;
   boolean changeMusic = false;
   PImage noteImg;
-  int noteOffset = 30;
+  int noteOffset = 20;
   boolean sound = true;
   boolean changeSound = false;
   PImage speakerImg;
-  int speakerOffset = 40;
+  int speakerOffset = 25;
 
   //Error Messages
   boolean showErrorMessage = false;
   String errorMessage;
   int startErrorMessage;
+  String level1string;
+  String level2string;
 
   SelectScreen() {
 
@@ -75,7 +77,7 @@ class SelectScreen {
     //User Instruction
     fill(240);
     textSize(32);
-    text("Choose a Level to Start", 400, 240);
+    text("Choose a Level to Start", 320, 220);
 
     //Buttons for each level
     level1Button.drawButton();
@@ -105,9 +107,13 @@ class SelectScreen {
     {
       if (mouseOverLevel(button) && !button.buttonFree && !showErrorMessage)
       {
-        fill(200);
+        fill(200); //<>//
+        textFont(numberFont);
+        textSize(40);
+        text(button.levelName, 450, 700);
+        textFont(letterFont);
         textSize(30);
-        text("Level " + button.levelName + " is not Available yet", 470, 680);
+        text("Level    is not Available yet", 300, 700);
       }
     }
   }
@@ -154,7 +160,9 @@ class SelectScreen {
       //prepare error
       int levelOfButton = Integer.parseInt(button.levelName);
       int levelBefore = levelOfButton-1;
-      errorMessage = "Finish Level "+ levelBefore + " Before Playing Level "+levelOfButton;
+      level1string = button.levelName;
+      level2string = Integer.toString(levelBefore);
+      errorMessage = "Finish Level    Before Playing Level   ";
       startErrorMessage = frameCount;
       showErrorMessage = true;
     }
@@ -163,7 +171,12 @@ class SelectScreen {
   void showErrorMessage(String message)
   {
     fill(200);
-    textSize(30);
-    text(message, 425, 680);
+    textFont(numberFont);
+      textSize(40);
+      text(level2string, 500, 700);
+      text(level1string, 1070, 700);
+      textFont(letterFont);
+      textSize(30);
+    text(message, 190, 700);
   }
 }
