@@ -1,9 +1,13 @@
 import processing.sound.*;
+import org.gamecontrolplus.*;
+import net.java.games.input.*;
+
+ControlIO control;
 ArrayList<Platform> platforms;
 Player player;
 Camera cam;
 PVector gravity;
-ControllerManager controllerManager = new ControllerManager();
+ControllerManager controllerManager;
 ArrayList<Platform> plat  = new ArrayList<Platform>();
 ArrayList<Collectable> collectables = new ArrayList<Collectable>();
 ArrayList<Collectable> toBeRemoved = new ArrayList<Collectable>();
@@ -36,9 +40,12 @@ CircleButton deadButton;
 Fluid fluid;
 int fluidHeight = 2000;
 
+
+
 void setup() {
   size(1280, 720, P3D);
-
+  control = ControlIO.getInstance(this);
+  
   
   backgroundColor = new PVector(35f/255f, 161f/255f, 235f/255f);
   letterFont = createFont("Fonts/SportypoRegular.ttf", 128);
@@ -91,6 +98,7 @@ void setup() {
 
   player = new Player(width/2, height/2, 0);
   cam = new Camera(player.position, 750, 250, 2000);
+  controllerManager = new ControllerManager();
 
   loadLevels();
 

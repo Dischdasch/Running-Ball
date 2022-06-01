@@ -1,4 +1,4 @@
-class Player {
+public class Player {
   // Physics
   PVector position, velocity, acceleration;
   float xAngle, zAngle, xAngleVelocity, zAngleVelocity;
@@ -36,6 +36,9 @@ class Player {
   }
 
   void update() {
+    controlForce.add(controllerManager.getMovement());
+    move();
+    
     PVector drag = velocity.copy();
     drag.y = 0;
     drag.mult(-1);
@@ -134,7 +137,10 @@ class Player {
     for (Control control : controls) {
       processControl(control);
     }
-
+    //move();
+  }
+  
+  private void move() {
     controlForce.setMag(movementForce);
     if (abs(cam.angle - cameraAngle) > 0.01) controlForce = MatrixOperations.yRotate(controlForce, cam.angle - cameraAngle);
     player.addForce(controlForce);
@@ -166,7 +172,7 @@ class Player {
     }
   }
 
-  void jump() {
+  public void jump() {
     if (grounded) {
       player.addForce(new PVector(0, -jumpForce, 0));
       jumpSound.play();

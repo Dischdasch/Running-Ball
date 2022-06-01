@@ -23,6 +23,7 @@ class Scene {
   void update() {
     pushMatrix();
     cam.update();
+    cam.zoom(controllerManager.getCameraZoom());
 
     background(backgroundColor.x*255, backgroundColor.y*255, backgroundColor.z*255);
     directionalLight(255, 255, 255, -1, 1, -1);
