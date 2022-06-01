@@ -17,12 +17,16 @@ public class Scene {
     player.position.x = 640;
     player.position.y = 420;
     player.position.z = 0;
+    player.velocity.x = 0;
+    player.velocity.y = 0;
+    player.velocity.z = 0;
     music.loop();
   }
 
   void update() {
     pushMatrix();
     cam.update();
+    sceneControls();
     cam.zoom(controllerManager.getCameraZoom());
 
     background(backgroundColor.x*255, backgroundColor.y*255, backgroundColor.z*255);
@@ -59,7 +63,20 @@ public class Scene {
     }
     hint(ENABLE_DEPTH_TEST);
   }
-
+  
+  //control iteration with scene
+  void sceneControls(){ 
+    for(Control control : controllerManager.getActions()){
+      if(control == Control.JUMP && finished){
+        next();
+      }
+      if(control == Control.RESTART){
+        selectUI.shown = true;
+        returnToMenu();
+      }
+    }
+  }
+  
   //coinui
   void coinUI() {
     stroke(255);

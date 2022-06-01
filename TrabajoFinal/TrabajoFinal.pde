@@ -141,7 +141,7 @@ void mouseWheel(MouseEvent event) {
 
 void mousePressed()
 {
-  selectUI.screenMousePressed();
+  if(selectUI.shown) selectUI.screenMousePressed();
 }
 
 void mouseReleased()
@@ -166,15 +166,6 @@ void playMusic(float speed) {
 void keyPressed() {
   controllerManager.keyPressed(key);
   player.onKeyPressedOnce();
-  if (key == 'R') {
-    // preEscena hace que cuando se reinicia, vuelve a la escena en la que estaba antes, no usar
-    // si se puede usar la ui.
-    selectUI.shown = true;
-    loadLevels();
-  }
-  if (key == ' ' && currentScene != null) {
-    onButtonPressed();
-  }
 }
 
 void keyReleased() {

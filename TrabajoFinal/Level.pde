@@ -4,6 +4,10 @@ PVector sizeH = new PVector(3000, 100, 3000);
 PVector sizeX2 = new PVector(3000, 100, 1001);
 PVector sizeL2 = new PVector(1000, 10000, 1001);
 PVector sizeL3 = new PVector(995, 10000, 1000);
+PVector sizeL4 = new PVector(5000, 400, 1000);
+PVector sizeLH = new PVector(1000, 10000, 3000);
+PVector sizeLH2 = new PVector(3000, 10000, 1000);
+PVector sizeA = new PVector(100000, 3000, 100000);
 /* Platform Size
  size = new PVector(x,y,z)
  x = largo*
@@ -15,33 +19,32 @@ PVector sizeL3 = new PVector(995, 10000, 1000);
  pos.add(new PVector(2000,-2000,0));
  (x,y,z)
  */
-
+ 
 Scene getLevel1(Scene nextLevel) {
   //almacenar array acon posiciones
   ArrayList<Platform> plat  = new ArrayList<Platform>();
   ArrayList<PVector> pos = new ArrayList<PVector>();
   ArrayList<Collectable> collectables = new ArrayList<Collectable>();
-
   pos.add(new PVector(width/2, height, 0));
-  pos.add(new PVector(2800, -2000, 0));
-  pos.add(new PVector(4400, -2000, 0));
-  pos.add(new PVector(6000, -2000, 0));
-  pos.add(new PVector(8500, -2000, -2000));
+  pos.add(new PVector(width/2+5000, height-3000, 0));
+  pos.add(new PVector(width/2+12000, height-4000, 0));
+ 
   for (PVector p : pos) {
     plat.add(new Platform(p.x, p.y, p.z, 0, 0, 0, sizeL));
   }
-
-  plat.add(new Platform(10400, -1800, 600, 0, 0, 0, sizeL2));
-  plat.add(new FastPlatform(6500, -2000, -1900, 0, 0, 0, sizeX2));
-  plat.add(new BouncingPlatform(1000, 800, -700, 0, 0, 0, sizeS));
-  plat.add(new WindPlatform(1000, 700, -1500, 0, 0, 0, sizeS));
-  plat.add(new SlidingPlatform(3000, -2000, -2000, 0, 0, 0, sizeH));
-  plat.add(new BreakablePlatform(3000, -2000, 2000, 0, 0, 0, sizeH));
-  plat.add(new GoalPlatform(7400, -1800, 600, 0, 0, 0, sizeL));
-
-  for (int i = 0; i < 20; i++) {
-    collectables.add(new Collectable(new PVector(2000 + 300*i, -2500, 0), 50, coinMaterial));
+  plat.add(new BouncingPlatform(3000,height,0,0,0,0, sizeS));
+  plat.add(new BreakablePlatform(17000,height-4000,0,0,0,0, sizeL4));
+  plat.add(new BreakablePlatform(22000,height-4000,0,0,0,0, sizeL4));
+  for(int i = 0; i < 5; i++){
+    plat.add(new WindPlatform(8000+i*600,height-1500-i*300,0,0,0,0, sizeS));
+    collectables.add(new Collectable(new PVector(8000+i*200, height-4000, 0), 50, coinMaterial));
   }
+  plat.add(new Platform(width/2+1000,height-7000,0,0,0,0, sizeLH));
+  plat.add(new Platform(width/2-1000,height-7000,0,0,0,0, sizeLH));
+  plat.add(new Platform(width/2,height-7000,1000,0,0,0, sizeLH2));
+  plat.add(new Platform(width/2,height-7000,-1000,0,0,0, sizeLH2));
+  plat.add(new GoalPlatform(25000, height-4000, 0, 0, 0, 0, sizeS));
+  
   return new Scene(plat, collectables, nextLevel, "one: Basics");
 }
 
@@ -109,7 +112,6 @@ Scene getLevel3(Scene nextLevel) {
 Scene getLevel4(Scene nextLevel) {
   ArrayList<Platform> plat  = new ArrayList<Platform>();
   ArrayList<PVector> pos = new ArrayList<PVector>();
-  ArrayList<PVector> pos2 = new ArrayList<PVector>();
   ArrayList<Collectable> collectables = new ArrayList<Collectable>();
 
   pos.add(new PVector(width/2, height, 0));

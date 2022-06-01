@@ -94,12 +94,7 @@ public class Player {
 
         //position.y = box.y + radius*2 + size.y;
         //Deteccion por ancho o por largo
-        if (dist(position.z+radius/2, 0, box.z, 0) < size.z + radius) {
-          player.addForce(new PVector(0, 0, -velocity.z*3));
-        }
-        if ((dist(position.x+radius/2, 0, box.x, 0) < size.x + radius)) {
-          player.addForce(new PVector(-velocity.x*3, 0, 0));
-        }
+        player.addForce(new PVector(-velocity.x*3, 0, -velocity.z*3));
 
         player.addForce(new PVector(0, -velocity.y, 0));
       } else {
