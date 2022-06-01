@@ -5,12 +5,16 @@ public class Scene {
   boolean finished;
   Scene nextScene;
   String name;
-
-  Scene(ArrayList<Platform> level, ArrayList<Collectable> collectable, Scene nextScene, String name) {
+  LevelButton uilevel;
+  
+  //sorry
+  int num;
+  Scene(ArrayList<Platform> level, ArrayList<Collectable> collectable, Scene nextScene, String name, int numunlock) {
     platforms = level;
     collectablesScene = collectable;
     this.nextScene = nextScene;
     this.name = name;
+    num = numunlock;
   }
 
   void init() {
@@ -114,7 +118,7 @@ public class Scene {
       onButtonPressed();
     }
   }
-
+  
   void handleCollectables() {
     for (Collectable collectable : collectablesScene) {
       collectable.display();
@@ -127,12 +131,16 @@ public class Scene {
     toBeRemoved.clear();
   }
 
+
   void next() {
     if (nextScene == null) {
       returnToMenu();
+      
     } else {
+      unlocked[num] = true;
       nextScene.init();
       currentScene = nextScene;
     }
   }
+  
 }

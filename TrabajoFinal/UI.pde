@@ -57,10 +57,10 @@ class SelectScreen {
   }
   
   void loadButtons() {
-    level1Button = new LevelButton(width/2 - 2*buttonSize - 45, height/2 - 100, buttonSize, color(0), color(50), true, "1", level1);
-    level2Button = new LevelButton(width/2 - buttonSize - 15, height/2 - 50, buttonSize, color(0), color(50), false, "2", level2);
-    level3Button = new LevelButton(width/2 +15, height/2, buttonSize, color(0), color(50), false, "3", level3);
-    level4Button = new LevelButton(width/2 + buttonSize + 45, height/2 +50, buttonSize, color(0), color(50), false, "4", level4);
+    level1Button = new LevelButton(width/2 - 2*buttonSize - 45, height/2 - 100, buttonSize, color(0), color(50), unlocked[0], "1", level1);
+    level2Button = new LevelButton(width/2 - buttonSize - 15, height/2 - 50, buttonSize, color(0), color(50), unlocked[1], "2", level2);
+    level3Button = new LevelButton(width/2 +15, height/2, buttonSize, color(0), color(50), unlocked[2], "3", level3);
+    level4Button = new LevelButton(width/2 + buttonSize + 45, height/2 +50, buttonSize, color(0), color(50), unlocked[3], "4", level4);
     
     buttons = new LevelButton[]{level1Button, level2Button, level3Button, level4Button};
   }

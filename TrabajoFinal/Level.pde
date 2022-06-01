@@ -7,7 +7,7 @@ PVector sizeL3 = new PVector(995, 10000, 1000);
 PVector sizeL4 = new PVector(5000, 400, 1000);
 PVector sizeLH = new PVector(1000, 10000, 3000);
 PVector sizeLH2 = new PVector(3000, 10000, 1000);
-PVector sizeA = new PVector(100000, 3000, 100000);
+PVector sizeA = new PVector(100000, 400, 100000);
 /* Platform Size
  size = new PVector(x,y,z)
  x = largo*
@@ -25,7 +25,7 @@ Scene getLevel1(Scene nextLevel) {
   ArrayList<Platform> plat  = new ArrayList<Platform>();
   ArrayList<PVector> pos = new ArrayList<PVector>();
   ArrayList<Collectable> collectables = new ArrayList<Collectable>();
-  pos.add(new PVector(width/2, height, 0));
+  plat.add(new Platform(width/2, height+100, 0,0,0,0, sizeA));
   pos.add(new PVector(width/2+5000, height-3000, 0));
   pos.add(new PVector(width/2+12000, height-4000, 0));
  
@@ -45,7 +45,7 @@ Scene getLevel1(Scene nextLevel) {
   plat.add(new Platform(width/2,height-7000,-1000,0,0,0, sizeLH2));
   plat.add(new GoalPlatform(25000, height-4000, 0, 0, 0, 0, sizeS));
   
-  return new Scene(plat, collectables, nextLevel, "one: Basics");
+  return new Scene(plat, collectables, nextLevel, "one: Basics",1);
 }
 
 Scene getLevel2(Scene nextLevel) {
@@ -85,7 +85,7 @@ Scene getLevel2(Scene nextLevel) {
   }
   plat.add(new BouncingPlatform(1000, height, -1000, 0, 0, 0, sizeS));
   plat.add(new GoalPlatform(15000, height-2000, 600, 0, 0, 0, sizeS));
-  return new Scene(plat, collectables, nextLevel, "two: Windy Day");
+  return new Scene(plat, collectables, nextLevel, "two: Windy Day",2);
 }
 
 Scene getLevel3(Scene nextLevel) {
@@ -107,7 +107,7 @@ Scene getLevel3(Scene nextLevel) {
   }
   plat.add(new GoalPlatform(15000, height-3200, 0, 0, 0, 0, sizeS));
 
-  return new Scene(plat, collectables, nextLevel, "three: Climbing Course");
+  return new Scene(plat, collectables, nextLevel, "three: Climbing Course",3);
 }
 Scene getLevel4(Scene nextLevel) {
   ArrayList<Platform> plat  = new ArrayList<Platform>();
@@ -146,5 +146,5 @@ Scene getLevel4(Scene nextLevel) {
   }
 
   plat.add(new GoalPlatform(11000, height, 500, 0, 0, 0, sizeS));
-  return new Scene(plat, collectables, nextLevel, "four: On a Rush");
+  return new Scene(plat, collectables, nextLevel, "four: On a Rush",3);
 }

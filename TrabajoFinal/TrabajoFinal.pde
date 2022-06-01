@@ -40,7 +40,8 @@ CircleButton deadButton;
 Fluid fluid;
 int fluidHeight = 2000;
 
-
+//booleans?
+boolean[] unlocked = new boolean[4];
 
 void setup() {
   size(1280, 720, P3D);
@@ -107,7 +108,16 @@ void setup() {
   deadButton = new CircleButton(width/2, height/2, 50, color(200), color(255));
   fluid = new Fluid(fluidHeight, true);
   
+  unlocked[0] = true;
+  unlocked[1] = false;
+  unlocked[2] = false;
+  unlocked[3] = false;
+  
   selectUI = new SelectScreen();
+  
+  loadLevels();
+  
+  
 }
 
 void draw() {
@@ -132,6 +142,7 @@ void loadLevels() {
   level3 = getLevel3(level4);
   level2 = getLevel2(level3);
   level1 = getLevel1(level2);
+  
 }
 
 void mouseWheel(MouseEvent event) {
