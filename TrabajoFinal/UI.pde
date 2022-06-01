@@ -107,7 +107,7 @@ class SelectScreen {
     {
       if (mouseOverLevel(button) && !button.buttonFree && !showErrorMessage)
       {
-        fill(200); //<>//
+        fill(200);
         textFont(numberFont);
         textSize(40);
         text(button.levelName, 450, 700);
@@ -145,7 +145,7 @@ class SelectScreen {
 
   boolean mouseOverLevel(LevelButton button)
   {
-    return button.overRect(button.rectX, button.rectY, button.rectSize, button.rectSize);
+    return button.overButton(button.rectX, button.rectY, button.rectSize);
   }
 
   void levelOrError(LevelButton button) //opens the level or shows error
